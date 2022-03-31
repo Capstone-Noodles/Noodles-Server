@@ -43,7 +43,7 @@ public class MybatisConfig {
 
         // Value Object를 선언해 놓은 package 경로
         // Mapper의 result, parameterType의 패키지 경로를 클래스만 작성 할 수 있도록 도와줌.
-        sessionFactory.setTypeAliasesPackage( "capston.noodles.model" );
+        sessionFactory.setTypeAliasesPackage("capston.noodles.model");
         return sessionFactory.getObject();
     }
 

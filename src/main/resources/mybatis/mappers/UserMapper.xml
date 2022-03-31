@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="capston.noodles.users.mapper.UserMapper">
+    <insert id="save"  parameterType="capston.noodles.users.model.dao.User">
+        Insert into UserInfo (identification, password, phoneNumber, nickname)
+        values(#{identification}, #{password}, #{phoneNumber}, #{nickname})
+    </insert>
+</mapper>
+
+<!--<mapper namespace="capston.noodles.users.mapper.UserMapper">-->
+<!--<insert id="save"  parameterType="capston.noodles.users.model.dao.User">-->
+<!--    Insert into UserInfo (userIdx, createdAt, updatedAt, status, identification, password, phoneNumber, nickname, profileImage, token, location, latitude, longitude, description)-->
+<!--    values(#{userIdx}, #{createdAt}, #{updatedAt}, #{status}, #{identification}, #{password}, #{phoneNumber}, #{nickname}, #{profileImage}, #{token}, #{location}, #{latitude}, #{longitude}, #{description})-->
+<!--</insert>-->
+<!--</mapper>-->
