@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="capston.noodles.User.mapper.MypageMapper">
+
+    <select id="getUserInfo" parameterType = "long" resultType="MypageResponse">
+        select u.profileImage, u.nickname, u.description, ifnull(0, x.following) following, ifnull(0, y.follower) follower, group_concat(p.postIdx) postIdxList
+        from UserInfo u
+                 left join (
+            select count(f.userIdx) following, f.userIdx
+            from Follow f
+            where f.status = 0
+            group by f.userIdx
+        )x on x.userIdx = u.userIdx
+                 left join (
+            select count(f.followingIdx) follower, f.followingIdx
+            from Follow f
+            where f.status = 0
+            group by f.followingIdx
+        )y on y.followingIdx = u.userIdx
+                 left join Post p on p.userIdx = u.userIdx and p.status = 0
+        where u.status = 0
+          and u.userIdx = #{userId}
+        group by u.profileImage, x.following, y.follower
+    </select>
+</mapper>
