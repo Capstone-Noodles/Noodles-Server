@@ -23,7 +23,7 @@ public class MybatisConfig {
 
     @Value("com.mysql.cj.jdbc.Driver")
     private String driverClassName;
-    @Value("jdbc:mysql://localhost:3306/Noodles?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul")
+    @Value("jdbc:mysql://localhost:3306/Noodles?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowMultiQueries=true")
     private String url;
     @Value("root")
     private String username;

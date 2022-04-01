@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="capston.noodles.Post.mapper.PostMapper">
+
+    <select id="getAllPostInfo" parameterType = "double" resultType="AllPostResponse">
+        set @location = POINT(#{longitude}, #{latitude});
+        select p.postIdx, u.userIdx, u.profileImage, group_concat(pi.image) postImageList, p.location, p.content,
+        case
+        when <![CDATA[st_distance_sphere(@location, POINT(p.longitude, p.latitude)) < 1000]]>
+        then concat(format(st_distance_sphere(@location, POINT(p.longitude, p.latitude)), 2), 'm')
+        else
+        concat(format(st_distance_sphere(@location, POINT(p.longitude, p.latitude)) * 0.001 , 2), 'km')
+        end as distance
+        from Post p
+        join PostImage pi on pi.postIdx = p.postIdx
+        join UserInfo u on u.userIdx = p.userIdx
+        where <![CDATA[st_distance_sphere(@location, POINT(p.longitude, p.latitude)) < 10000]]>         #5km 미만만 보여줌
+        group by p.postIdx
+    </select>
+</mapper>
