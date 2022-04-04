@@ -1,12 +1,11 @@
 package capston.noodles.Post.controller;
 
 import capston.noodles.Post.model.response.AllPostResponse;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import capston.noodles.Post.model.response.OnePostResponse;
 import capston.noodles.Post.service.PostService;
+import capston.noodles.common.response.ResponseMessage;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,5 +19,12 @@ public class PostController {
         List<AllPostResponse> AllPostList = postService.getAllPostInfo(longitude, latitude);
 
         return AllPostList;
+    }
+
+    @GetMapping("/posts/{postIdx}")
+    public List<OnePostResponse> getOnePostInfo(@PathVariable("postIdx") long postIdx) {
+        List<OnePostResponse> onePostList = postService.getOnePostInfo(postIdx);
+
+        return onePostList;
     }
 }

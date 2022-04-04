@@ -9,5 +9,7 @@
     <typeAliases>
         <typeAlias type="capston.noodles.User.model.response.MypageResponse" alias="MypageResponse"/>
         <typeAlias type="capston.noodles.Post.model.response.AllPostResponse" alias="AllPostResponse"/>
+        <typeAlias type="capston.noodles.Post.model.response.OnePostResponse" alias="OnePostResponse"/>
+
     </typeAliases>
 </configuration>
