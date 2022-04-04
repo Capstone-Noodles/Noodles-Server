@@ -19,4 +19,12 @@
         where <![CDATA[st_distance_sphere(@location, POINT(p.longitude, p.latitude)) < 10000]]>         #5km 미만만 보여줌
         group by p.postIdx
     </select>
+
+    <select id="getOnePostInfo" parameterType = "long" resultType="OnePostResponse">
+        select date_format(P.createdAt, '%Y-%m-%d %T') as createdAt, P.location, P.latitude, P.longitude, P.content,
+               (select nickname from UserInfo UI where P.userIdx = UI.userIdx) as nickname,
+               (select profileImage from UserInfo UI where P.userIdx = UI.userIdx) as profilImg
+        from Post P
+        where postIdx = #{postIdx};
+    </select>
 </mapper>
