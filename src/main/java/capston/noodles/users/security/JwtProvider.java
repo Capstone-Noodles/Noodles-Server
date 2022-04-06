@@ -3,7 +3,7 @@ package capston.noodles.users.security;
 
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,7 +49,7 @@ public class JwtProvider {
 
     // Jwt로 인증정보 조회
     public Authentication getAuthentication(String token){
-        UserDetails userDetails = userDetailService.loadByUsername(this.getUserPk(token));
+        UserDetails userDetails = userDetailService.loadUserByUsername(this.getUserPk(token));
         return new UsernamePasswordAuthenticationToken(userDetails,"", userDetails.getAuthorities());
     }
 
