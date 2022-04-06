@@ -17,4 +17,8 @@ public class UserService {
         return;
     }
 
+    @Transactional
+    public User findById(int userPk){
+        return userRepository.findById(userPk);
+    }
 }

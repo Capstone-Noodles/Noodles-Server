@@ -8,6 +8,9 @@
         Insert into UserInfo (identification, password, phoneNumber, nickname)
         values(#{identification}, #{password}, #{phoneNumber}, #{nickname})
     </insert>
+    <select id="findById" parameterType="int" resultType="capston.noodles.users.model.dao.User">
+        select * from UserInfo where userIdx=#{userPk}
+    </select>
 </mapper>
 
 <!--<mapper namespace="capston.noodles.users.mapper.UserMapper">-->
