@@ -1,5 +1,6 @@
 package capston.noodles.users;
 
+import capston.noodles.common.ErrorCode;
 import capston.noodles.users.model.dao.User;
 import capston.noodles.users.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
@@ -26,16 +27,14 @@ public class UserService {
     }
 
     @Transactional
-    public void save(User user) {
+    public int save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setAuthority("ROLE_USER");
         if (userRepository.findByIdentification(user.getIdentification()) == null) {
 
-            userRepository.insertUser(user);
-            return;
+            return userRepository.insertUser(user);
         }
-        System.out.println("아이디 중복");
-        return;
+        return -1;
     }
 
     @Transactional

@@ -4,6 +4,7 @@ import capston.noodles.common.response.ResponseMessage;
 import capston.noodles.users.model.dao.User;
 import capston.noodles.users.model.dto.JwtDto;
 import capston.noodles.users.model.dto.LoginRequestDto;
+import capston.noodles.users.model.dto.LoginSuccess;
 import capston.noodles.users.model.dto.SignupDto;
 import capston.noodles.users.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
@@ -18,33 +19,30 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/users")
-    public void signUp(@RequestBody SignupDto dto){
-        User user = dto.toUser();
-
-        return;
-    }
-
-    @PostMapping("/v1/login")
+    @PostMapping("/users/login")
     public ResponseMessage login(@RequestBody LoginRequestDto dto) {
 
 
         String result = userService.login(dto.getId(), dto.getPassword());
-
+        if(result.equals("Wrong password"))
+            return new ResponseMessage("비밀번호가 잘못되었습니다.");
 
         return new ResponseMessage(new JwtDto(result));
     }
 
-    @PostMapping("/v1/signup")
-    public void signup(@RequestBody SignupDto dto) {
+    @PostMapping("/users")
+    public ResponseMessage signup(@RequestBody SignupDto dto) {
         User user = dto.toUser();
-        userService.save(user);
-        return;
+        int userIdx = userService.save(user);
+        if (userIdx < 0){
+            return new ResponseMessage("회원 아이디가 중복되었습니다.");
+        }
+
+        return new ResponseMessage(new LoginSuccess(userIdx));
     }
 
     @GetMapping("v1/test")
     public String test(){
-        System.out.println("here");
         return "pass";
     }
 

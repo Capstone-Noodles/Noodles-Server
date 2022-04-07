@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="capston.noodles.users.mapper.UserMapper">
-    <insert id="save"  parameterType="capston.noodles.users.model.dao.User">
+    <insert id="save"  parameterType="capston.noodles.users.model.dao.User" useGeneratedKeys="true" keyProperty="userIdx">
         Insert into UserInfo (identification, password, phoneNumber, nickname, authority)
         values(#{identification}, #{password}, #{phoneNumber}, #{nickname}, #{authority})
     </insert>
