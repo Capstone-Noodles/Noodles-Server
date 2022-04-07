@@ -32,6 +32,7 @@ public class MybatisConfig {
 
     public MybatisConfig(ApplicationContext applicationContext) {this.applicationContext = applicationContext;}
 
+
     @Bean
     public SqlSessionFactory sqlSessionFactory() throws Exception{
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
