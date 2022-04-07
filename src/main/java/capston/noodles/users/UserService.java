@@ -40,6 +40,9 @@ public class UserService {
     @Transactional
     public String login(String id, String password){
         User user = userRepository.findByIdentification(id);
+        if (user == null) {
+            return "Wrong Id";
+        }
         if (!passwordEncoder.matches(password, user.getPassword())) {
             return "Wrong password";
         }

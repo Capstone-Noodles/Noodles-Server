@@ -24,6 +24,9 @@ public class UserController {
 
 
         String result = userService.login(dto.getId(), dto.getPassword());
+        if (result.equals("Wrong Id")) {
+            return new ResponseMessage("입력하신 id와 일치하는 계정이 없습니다.");
+        }
         if(result.equals("Wrong password"))
             return new ResponseMessage("비밀번호가 잘못되었습니다.");
 
