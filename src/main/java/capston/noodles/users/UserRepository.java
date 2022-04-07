@@ -11,8 +11,10 @@ public class UserRepository {
 
     private final UserMapper userMapper;
 
-    public void insertUser(User user) {
+    public int insertUser(User user) {
         userMapper.save(user);
+        return user.getUserIdx();
+
     }
 
     public User findByIdentification(String identification) {
