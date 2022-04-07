@@ -26,4 +26,5 @@ public class User {
     private float latitude;
     private float longitude;
     private String description;
+    private String authority;
 }

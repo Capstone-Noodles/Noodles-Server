@@ -15,6 +15,12 @@ public class UserRepository {
         userMapper.save(user);
     }
 
+    public User findByIdentification(String identification) {
+        return userMapper.findByIdentification(identification);
+    }
+
+
+
     public User findById(int userPk){
         return userMapper.findById(userPk);
     }

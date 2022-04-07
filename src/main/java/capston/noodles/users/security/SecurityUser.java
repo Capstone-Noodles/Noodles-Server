@@ -24,16 +24,17 @@ public class SecurityUser implements UserDetails {
 
     private String id;
     private String nickname;
+    @Builder.Default
+    private List<String> roles = new ArrayList<>();
 
     public SecurityUser(User user){
         this.userIdx = user.getUserIdx();
         this.password = user.getPassword();
         this.id = user.getIdentification();
         this.nickname = user.getNickname();
+        this.roles.add(user.getAuthority());
     }
 
-    @Builder.Default
-    private List<String> roles = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -7,4 +7,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface UserMapper {
     void save(User user);
     User findById(int userPk);
+    User findByIdentification(String identification);
 }
