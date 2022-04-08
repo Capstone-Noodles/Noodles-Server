@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -56,4 +57,9 @@ public class UserService {
     public User findById(int userPk){
         return userRepository.findById(userPk);
     }
+
+    public void test(HttpServletRequest request){
+        System.out.println(jwtProvider.getUserPk(jwtProvider.resolveToken(request)));
+    }
+
 }

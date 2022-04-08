@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 
 @RestController
@@ -45,7 +46,8 @@ public class UserController {
     }
 
     @GetMapping("v1/test")
-    public String test(){
+    public String test(HttpServletRequest request){
+        userService.test(request);
         return "pass";
     }
 
