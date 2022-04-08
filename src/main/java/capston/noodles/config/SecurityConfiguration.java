@@ -1,5 +1,7 @@
 package capston.noodles.config;
 
+import capston.noodles.users.security.handler.CustomAccessDeniedHandler;
+import capston.noodles.users.security.handler.CustomAuthenticationEntryPoint;
 import capston.noodles.users.security.JwtAuthenticationFilter;
 import capston.noodles.users.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +37,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/*/login", "/*/signup").permitAll()
                 .antMatchers("/users/login").permitAll()
                 .antMatchers(HttpMethod.POST,"/users").permitAll()
+                .antMatchers(HttpMethod.GET, "/exception/**").permitAll()
                 .anyRequest().hasRole("USER")
+                .and()
+                // 접근권한이 없을 때 처리 ex) no jwt or wrong jwt
+                .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                .and()
+                // 접근권한이 부족할 때 처리 ex) admin이 가능할 때 user가 요청
+                .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
     }

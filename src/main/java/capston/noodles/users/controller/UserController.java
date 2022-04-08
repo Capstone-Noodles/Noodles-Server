@@ -1,6 +1,10 @@
-package capston.noodles.users;
+package capston.noodles.users.controller;
 
 import capston.noodles.common.response.ResponseMessage;
+import capston.noodles.users.UserService;
+import capston.noodles.users.exception.EmailLoginFailedException;
+import capston.noodles.users.exception.LoginIdNotFoundException;
+import capston.noodles.users.exception.LoginPwdNotCorrectException;
 import capston.noodles.users.model.dao.User;
 import capston.noodles.users.model.dto.JwtDto;
 import capston.noodles.users.model.dto.LoginRequestDto;
@@ -26,10 +30,11 @@ public class UserController {
 
         String result = userService.login(dto.getId(), dto.getPassword());
         if (result.equals("Wrong Id")) {
-            return new ResponseMessage("입력하신 id와 일치하는 계정이 없습니다.");
+            throw new LoginIdNotFoundException();
         }
         if(result.equals("Wrong password"))
-            return new ResponseMessage("비밀번호가 잘못되었습니다.");
+//            return new ResponseMessage("비밀번호 틀림");
+            throw new LoginPwdNotCorrectException();
 
         return new ResponseMessage(new JwtDto(result));
     }
