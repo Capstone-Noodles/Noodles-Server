@@ -11,6 +11,7 @@ import capston.noodles.users.model.dto.LoginRequestDto;
 import capston.noodles.users.model.dto.LoginSuccess;
 import capston.noodles.users.model.dto.SignupDto;
 import capston.noodles.users.security.JwtProvider;
+import capston.noodles.users.security.model.dto.TokenDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -28,15 +29,10 @@ public class UserController {
     public ResponseMessage login(@RequestBody LoginRequestDto dto) {
 
 
-        String result = userService.login(dto.getId(), dto.getPassword());
-        if (result.equals("Wrong Id")) {
-            throw new LoginIdNotFoundException();
-        }
-        if(result.equals("Wrong password"))
-//            return new ResponseMessage("비밀번호 틀림");
-            throw new LoginPwdNotCorrectException();
+        TokenDto result = userService.login(dto.getId(), dto.getPassword());
 
-        return new ResponseMessage(new JwtDto(result));
+
+        return new ResponseMessage<TokenDto>(result);
     }
 
     @PostMapping("/users")
@@ -50,11 +46,11 @@ public class UserController {
         return new ResponseMessage(new LoginSuccess(userIdx));
     }
 
-    @GetMapping("v1/test")
-    public String test(HttpServletRequest request){
-        userService.test(request);
-        return "pass";
-    }
+//    @GetMapping("v1/test")
+//    public String test(HttpServletRequest request){
+//        userService.test(request);
+//        return "pass";
+//    }
 
 
 }

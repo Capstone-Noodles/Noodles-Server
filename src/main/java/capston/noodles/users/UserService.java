@@ -1,8 +1,12 @@
 package capston.noodles.users;
 
 import capston.noodles.common.ErrorCode;
+import capston.noodles.users.exception.LoginIdNotFoundException;
+import capston.noodles.users.exception.LoginPwdNotCorrectException;
 import capston.noodles.users.model.dao.User;
+import capston.noodles.users.model.dto.SetRefreshTokenDto;
 import capston.noodles.users.security.JwtProvider;
+import capston.noodles.users.security.model.dto.TokenDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,17 +43,29 @@ public class UserService {
     }
 
     @Transactional
-    public String login(String id, String password){
+    public TokenDto login(String id, String password){
         User user = userRepository.findByIdentification(id);
         if (user == null) {
-            return "Wrong Id";
+            throw new LoginIdNotFoundException();
         }
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            return "Wrong password";
+            throw new LoginPwdNotCorrectException();
         }
         ArrayList<String> list = new ArrayList<>();
         list.add(user.getAuthority());
-        return jwtProvider.createToken(String.valueOf(user.getUserIdx()), list);
+
+        TokenDto tokenDto = jwtProvider.createToken(String.valueOf(user.getUserIdx()), list);
+        String refreshToken = tokenDto.getRefreshToken();
+
+        userRepository.setRefreshToken(SetRefreshTokenDto.builder()
+                .identification(id)
+                .refreshToken(refreshToken)
+                .build()
+        );
+
+        return tokenDto;
+
+
     }
 
 
@@ -58,8 +74,8 @@ public class UserService {
         return userRepository.findById(userPk);
     }
 
-    public void test(HttpServletRequest request){
-        System.out.println(jwtProvider.getUserPk(jwtProvider.resolveToken(request)));
-    }
+//    public void test(HttpServletRequest request){
+//        System.out.println(jwtProvider.getUserPk(jwtProvider.resolveToken(request)));
+//    }
 
 }

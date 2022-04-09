@@ -2,6 +2,7 @@ package capston.noodles.users;
 
 import capston.noodles.users.mapper.UserMapper;
 import capston.noodles.users.model.dao.User;
+import capston.noodles.users.model.dto.SetRefreshTokenDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -25,6 +26,12 @@ public class UserRepository {
 
     public User findById(int userPk){
         return userMapper.findById(userPk);
+    }
+
+    public void setRefreshToken(SetRefreshTokenDto dto) {
+
+        userMapper.setRefreshToken(dto);
+        return;
     }
 
 

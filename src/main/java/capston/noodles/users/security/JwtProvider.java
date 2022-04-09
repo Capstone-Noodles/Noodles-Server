@@ -1,6 +1,8 @@
 package capston.noodles.users.security;
 
 
+import capston.noodles.users.security.exception.CAuthenticationEntryPointException;
+import capston.noodles.users.security.model.dto.TokenDto;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +25,8 @@ public class JwtProvider {
     @Value("spring.jwt.secret")
     private String secretKey;
 
-    private Long tokenValidMillisecond = 60 * 60 * 1000L;
+    private Long accessTokenValidMillisecond = 60 * 60 * 1000L; // 1 hour
+    private Long refreshTokenValidMillisecond = 14 * 24 * 60 * 60 * 1000L; // 14 day
 
     private final CustomUserDetailService userDetailService;
 
@@ -33,30 +36,61 @@ public class JwtProvider {
     }
 
     // Jwt 생성
-    public String createToken(String userPk, List<String> roles){
+    public TokenDto createToken(String userPk, List<String> roles){
         Claims claims = Jwts.claims().setSubject(userPk);
         claims.put("roles", roles);
 
         Date now = new Date();
 
-        return Jwts.builder()
+        String accessToken = Jwts.builder()
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + tokenValidMillisecond))
+                .setExpiration(new Date(now.getTime() + accessTokenValidMillisecond))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
+        String refreshToken = Jwts.builder()
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+                .setExpiration(new Date(now.getTime() + refreshTokenValidMillisecond))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
+
+        return TokenDto.builder()
+                .grantType("bearer")
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .accessTokenExpireDate(accessTokenValidMillisecond)
+                .build();
+
     }
 
     // Jwt로 인증정보 조회
     public Authentication getAuthentication(String token){
-        UserDetails userDetails = userDetailService.loadUserByUsername(this.getUserPk(token));
+
+        Claims claims = parseClaims(token);
+
+
+        if(claims.get("roles") == null){
+            throw new CAuthenticationEntryPointException();
+        }
+
+        UserDetails userDetails = userDetailService.loadUserByUsername(claims.getSubject());
         return new UsernamePasswordAuthenticationToken(userDetails,"", userDetails.getAuthorities());
     }
 
-    // Jwt 에서 회원 구분 Pk 추출
-    public String getUserPk(String token){
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+    // Jwt 토큰 복호화해서 가져오기
+    private Claims parseClaims(String token){
+        try{
+            return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+        } catch(ExpiredJwtException e){
+            return e.getClaims();
+        }
     }
+
+//    // Jwt 에서 회원 구분 Pk 추출
+//    public String getUserPk(String token){
+//        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+//    }
 
     // HTTP Request 헤더에서 Token parsing -> "X-AUTH-TOKEN: jwt"
     public String resolveToken(HttpServletRequest request){
