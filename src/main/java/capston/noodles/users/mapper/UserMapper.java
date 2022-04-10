@@ -10,4 +10,6 @@ public interface UserMapper {
     User findById(int userPk);
     User findByIdentification(String identification);
     void setRefreshToken(SetRefreshTokenDto dto);
+
+    String getRefreshTokenByUserIdx(int userIdx);
 }

@@ -6,10 +6,7 @@ import capston.noodles.users.exception.EmailLoginFailedException;
 import capston.noodles.users.exception.LoginIdNotFoundException;
 import capston.noodles.users.exception.LoginPwdNotCorrectException;
 import capston.noodles.users.model.dao.User;
-import capston.noodles.users.model.dto.JwtDto;
-import capston.noodles.users.model.dto.LoginRequestDto;
-import capston.noodles.users.model.dto.LoginSuccess;
-import capston.noodles.users.model.dto.SignupDto;
+import capston.noodles.users.model.dto.*;
 import capston.noodles.users.security.JwtProvider;
 import capston.noodles.users.security.model.dto.TokenDto;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +41,11 @@ public class UserController {
         }
 
         return new ResponseMessage(new LoginSuccess(userIdx));
+    }
+
+    @PostMapping("/reissue")
+    public ResponseMessage<TokenDto> reissue(@RequestBody TokenRequestDto dto) {
+        return new ResponseMessage<TokenDto>(userService.reissue(dto));
     }
 
 //    @GetMapping("v1/test")

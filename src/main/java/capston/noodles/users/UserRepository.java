@@ -34,5 +34,9 @@ public class UserRepository {
         return;
     }
 
+    public String getRefreshTokenByUserIdx(int userIdx){
+        return userMapper.getRefreshTokenByUserIdx(userIdx);
+    }
+
 
 }

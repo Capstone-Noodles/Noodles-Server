@@ -16,9 +16,13 @@
         select * from UserInfo where identification = #{identification}
     </select>
 
-    <insert id="setRefreshToken" parameterType="SetRefreshTokenDto">
+    <insert id="setRefreshToken" parameterType="capston.noodles.users.model.dto.SetRefreshTokenDto">
         update UserInfo set token = #{refreshToken} where identification = #{identification}
     </insert>
+
+    <select id="getRefreshTokenByUserIdx" parameterType="int" resultType="String">
+        select token from UserInfo where userIdx=#{userIdx}
+    </select>
 </mapper>
 
 <!--<mapper namespace="capston.noodles.users.mapper.UserMapper">-->

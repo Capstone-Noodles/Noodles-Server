@@ -5,6 +5,7 @@ import capston.noodles.users.security.exception.CAuthenticationEntryPointExcepti
 import capston.noodles.users.security.model.dto.TokenDto;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class JwtProvider {
 
     @Value("spring.jwt.secret")
@@ -87,10 +89,10 @@ public class JwtProvider {
         }
     }
 
-//    // Jwt 에서 회원 구분 Pk 추출
-//    public String getUserPk(String token){
-//        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
-//    }
+    // Jwt 에서 회원 구분 Pk 추출
+    public String getUserPk(String token){
+        return parseClaims(token).getSubject();
+    }
 
     // HTTP Request 헤더에서 Token parsing -> "X-AUTH-TOKEN: jwt"
     public String resolveToken(HttpServletRequest request){
@@ -100,9 +102,11 @@ public class JwtProvider {
     // jwt의 유효성 및 만료일자 확인
     public boolean validationToken(String token){
         try{
-            Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-            return !claimsJws.getBody().getExpiration().before(new Date()); // 만료 날짜가 현재보다 이전이면 False
-        }catch(Exception e){
+            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            return true;
+//            return !claimsJws.getBody().getExpiration().before(new Date()); // 만료 날짜가 현재보다 이전이면 False
+        }catch(JwtException | IllegalArgumentException e){
+            log.error(e.toString());
             return false;
         }
     }
