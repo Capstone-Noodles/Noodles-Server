@@ -5,6 +5,7 @@ import capston.noodles.users.security.exception.AccessDeniedException;
 import capston.noodles.users.security.exception.CAuthenticationEntryPointException;
 import capston.noodles.users.exception.LoginIdNotFoundException;
 import capston.noodles.users.exception.LoginPwdNotCorrectException;
+import capston.noodles.users.security.exception.CRefreshTokenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -37,5 +38,11 @@ public class ControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ResponseMessage loginPwdNotCorrectException(HttpServletRequest request, LoginPwdNotCorrectException e) {
         return new ResponseMessage("비밀번호가 일치하지 않습니다.");
+    }
+
+    @ExceptionHandler(CRefreshTokenException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ResponseMessage refreshTokenException(HttpServletRequest request, CRefreshTokenException e) {
+        return new ResponseMessage(e.getMessage());
     }
 }
