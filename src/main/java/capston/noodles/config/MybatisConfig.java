@@ -23,11 +23,11 @@ public class MybatisConfig {
 
     @Value("com.mysql.cj.jdbc.Driver")
     private String driverClassName;
-    @Value("jdbc:mysql://localhost:3306/Noodles?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowMultiQueries=true&allowPublicKeyRetrieval=true")
+    @Value("jdbc:mysql://db-noodles.cx3wdcqqylrw.ap-northeast-2.rds.amazonaws.com:3306/noodles_db?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowMultiQueries=true&allowPublicKeyRetrieval=true")
     private String url;
     @Value("root")
     private String username;
-    @Value("1100")
+    @Value("noodles1100")
     private String password;
 
     public MybatisConfig(ApplicationContext applicationContext) {this.applicationContext = applicationContext;}
