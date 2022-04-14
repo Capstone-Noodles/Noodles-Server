@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -29,8 +30,10 @@ public class PostController {
         return onePostList;
     }
 
-    @PostMapping("/api/v1/upload")
-    public String uploadImage(@RequestPart MultipartFile file) {
-        return postService.uploadImage(file);
+    @PostMapping("/upload")
+    public String uploadImage(MultipartFile file) throws IOException {
+        String imgPath = postService.uploadImage(file);
+
+        return imgPath;
     }
 }
