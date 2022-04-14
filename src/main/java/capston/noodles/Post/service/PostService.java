@@ -1,5 +1,6 @@
 package capston.noodles.Post.service;
 
+import capston.noodles.Post.model.entity.dto.TotalUploadPostDto;
 import capston.noodles.Post.model.response.AllPostResponse;
 import capston.noodles.Post.model.response.OnePostResponse;
 import capston.noodles.Post.repository.PostRepository;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
 
@@ -62,5 +64,16 @@ public class PostService {
         s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
         return s3Client.getUrl(bucket, fileName).toString();
+    }
+
+    @Transactional
+    public long postPost(TotalUploadPostDto totalUploadPostDto) {
+        Long ret = postRepository.postPost(totalUploadPostDto);
+        if (ret == null) {
+            throw new Error();
+        }
+        postRepository.postImage(ret, totalUploadPostDto);
+
+        return ret;
     }
 }

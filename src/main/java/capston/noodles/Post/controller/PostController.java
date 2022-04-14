@@ -1,5 +1,7 @@
 package capston.noodles.Post.controller;
 
+import capston.noodles.Post.model.entity.dto.TotalUploadPostDto;
+import capston.noodles.Post.model.entity.dto.UploadPostDto;
 import capston.noodles.Post.model.response.AllPostResponse;
 import capston.noodles.Post.model.response.OnePostResponse;
 import capston.noodles.Post.service.PostService;
@@ -7,6 +9,7 @@ import capston.noodles.common.response.ResponseMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartRequest;
 
 import java.io.IOException;
 import java.util.List;
@@ -36,4 +39,15 @@ public class PostController {
 
         return imgPath;
     }
+
+    @PostMapping("/posts/write")
+    public ResponseMessage uploadPost(@RequestBody UploadPostDto uploadPostDto, MultipartFile file) throws IOException {
+
+        String imgPath = postService.uploadImage(file);
+        TotalUploadPostDto totalUploadPostDto = TotalUploadPostDto.toTotalUploadPostDto(uploadPostDto, imgPath);
+        long postResult = postService.postPost(totalUploadPostDto);
+
+        return new ResponseMessage("hi");
+    }
+
 }
