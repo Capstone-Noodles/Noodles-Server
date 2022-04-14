@@ -1,6 +1,7 @@
 package capston.noodles.Post.repository;
 
 import capston.noodles.Post.mapper.PostMapper;
+import capston.noodles.Post.model.entity.dto.TotalUploadPostDto;
 import capston.noodles.Post.model.response.AllPostResponse;
 import capston.noodles.Post.model.response.OnePostResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,5 +20,13 @@ public class PostRepository {
 
     public List<OnePostResponse> getOnePostInfo(long postIdx) {
         return postMapper.getOnePostInfo(postIdx);
+    }
+
+    public long postPost(TotalUploadPostDto totalUploadPostDto) {
+        return postMapper.postPost(totalUploadPostDto);
+    }
+
+    public long postImage(long postImageIdx, TotalUploadPostDto totalUploadPostDto) {
+        return postMapper.insertImage(postImageIdx, totalUploadPostDto.getImage());
     }
 }

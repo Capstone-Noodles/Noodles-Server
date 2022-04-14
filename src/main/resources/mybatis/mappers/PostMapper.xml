@@ -27,4 +27,14 @@
         from Post P
         where postIdx = #{postIdx};
     </select>
+
+    <insert id="postPost" parameterType = "TotalUploadPostDto" useGeneratedKeys="true" keyProperty="postIdx">
+        insert into Post(location, latitude, longitude, content, userIdx)
+        values(#{location}, #{latitude}, #{longitude}, #{content}, #{userIdx});
+    </insert>
+
+    <insert id="insertImage" parameterType="map" useGeneratedKeys="true" keyProperty="postImageIdx">
+        insert into PostImage(postImageIdx, image)
+        values (#{postImageIdx}, #{image});
+    </insert>
 </mapper>
