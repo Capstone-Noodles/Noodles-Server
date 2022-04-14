@@ -1,6 +1,9 @@
 package capston.noodles.Post.service;
 
+import capston.noodles.Post.model.entity.Post;
+import capston.noodles.Post.model.entity.PostImage;
 import capston.noodles.Post.model.entity.dto.TotalUploadPostDto;
+import capston.noodles.Post.model.entity.dto.UploadPostDto;
 import capston.noodles.Post.model.response.AllPostResponse;
 import capston.noodles.Post.model.response.OnePostResponse;
 import capston.noodles.Post.repository.PostRepository;
@@ -67,13 +70,26 @@ public class PostService {
     }
 
     @Transactional
-    public long postPost(TotalUploadPostDto totalUploadPostDto) {
-        Long ret = postRepository.postPost(totalUploadPostDto);
-        if (ret == null) {
+    public void postPost(UploadPostDto dto, MultipartFile file) throws IOException {
+        String imgPath = uploadImage(file);
+        Post post = dto.toPost();
+        postRepository.postPost(post);
+        Long postIdx = post.getPostIdx();
+        if (postIdx == null) {
             throw new Error();
         }
-        postRepository.postImage(ret, totalUploadPostDto);
 
-        return ret;
+        PostImage postImage = new PostImage();
+        postImage.setPostIdx(postIdx);
+        postImage.setImage(imgPath);
+        postRepository.postImage(postImage);
+
+        Long postImageIdx = postImage.getPostIdx();
+
+        if (postImageIdx == null) {
+            throw new Error();
+        }
+
+        return;
     }
 }

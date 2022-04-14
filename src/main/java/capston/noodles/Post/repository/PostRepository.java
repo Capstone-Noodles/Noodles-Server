@@ -1,6 +1,8 @@
 package capston.noodles.Post.repository;
 
 import capston.noodles.Post.mapper.PostMapper;
+import capston.noodles.Post.model.entity.Post;
+import capston.noodles.Post.model.entity.PostImage;
 import capston.noodles.Post.model.entity.dto.TotalUploadPostDto;
 import capston.noodles.Post.model.response.AllPostResponse;
 import capston.noodles.Post.model.response.OnePostResponse;
@@ -22,11 +24,15 @@ public class PostRepository {
         return postMapper.getOnePostInfo(postIdx);
     }
 
-    public long postPost(TotalUploadPostDto totalUploadPostDto) {
-        return postMapper.postPost(totalUploadPostDto);
+    public void postPost(Post post) {
+        postMapper.postPost(post);
+        return;
     }
 
-    public long postImage(long postImageIdx, TotalUploadPostDto totalUploadPostDto) {
-        return postMapper.insertImage(postImageIdx, totalUploadPostDto.getImage());
+    public void postImage(PostImage postImage) {
+
+
+        postMapper.insertImage(postImage);
+        return;
     }
 }
