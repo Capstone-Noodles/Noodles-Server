@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="capston.noodles.users.mapper.UserMapper">
+    <insert id="save"  parameterType="capston.noodles.users.model.dao.User" useGeneratedKeys="true" keyProperty="userIdx">
+        Insert into UserInfo (identification, password, phoneNumber, nickname, authority)
+        values(#{identification}, #{password}, #{phoneNumber}, #{nickname}, #{authority})
+    </insert>
+    <select id="findById" parameterType="int" resultType="capston.noodles.users.model.dao.User">
+        select * from UserInfo where userIdx=#{userPk}
+    </select>
+
+    <select id="findByIdentification" parameterType="String" resultType="capston.noodles.users.model.dao.User">
+        select * from UserInfo where identification = #{identification}
+    </select>
+
+    <insert id="setRefreshToken" parameterType="capston.noodles.users.model.dto.SetRefreshTokenDto">
+        update UserInfo set token = #{refreshToken} where identification = #{identification}
+    </insert>
+
+    <select id="getRefreshTokenByUserIdx" parameterType="int" resultType="String">
+        select token from UserInfo where userIdx=#{userIdx}
+    </select>
+</mapper>
+
+<!--<mapper namespace="capston.noodles.users.mapper.UserMapper">-->
+<!--<insert id="save"  parameterType="capston.noodles.users.model.dao.User">-->
+<!--    Insert into UserInfo (userIdx, createdAt, updatedAt, status, identification, password, phoneNumber, nickname, profileImage, token, location, latitude, longitude, description)-->
+<!--    values(#{userIdx}, #{createdAt}, #{updatedAt}, #{status}, #{identification}, #{password}, #{phoneNumber}, #{nickname}, #{profileImage}, #{token}, #{location}, #{latitude}, #{longitude}, #{description})-->
+<!--</insert>-->
+<!--</mapper>-->

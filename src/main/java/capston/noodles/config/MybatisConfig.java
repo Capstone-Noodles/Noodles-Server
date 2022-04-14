@@ -23,14 +23,15 @@ public class MybatisConfig {
 
     @Value("com.mysql.cj.jdbc.Driver")
     private String driverClassName;
-    @Value("jdbc:mysql://localhost:3306/Noodles?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowMultiQueries=true&allowPublicKeyRetrieval=true")
+    @Value("${spring.db.url}")
     private String url;
-    @Value("root")
+    @Value("${spring.db.username}")
     private String username;
-    @Value("1100")
+    @Value("${spring.db.password}")
     private String password;
 
     public MybatisConfig(ApplicationContext applicationContext) {this.applicationContext = applicationContext;}
+
 
     @Bean
     public SqlSessionFactory sqlSessionFactory() throws Exception{

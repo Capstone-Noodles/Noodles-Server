@@ -6,6 +6,7 @@ import capston.noodles.Post.service.PostService;
 import capston.noodles.common.response.ResponseMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,5 +27,10 @@ public class PostController {
         List<OnePostResponse> onePostList = postService.getOnePostInfo(postIdx);
 
         return onePostList;
+    }
+
+    @PostMapping("/api/v1/upload")
+    public String uploadImage(@RequestPart MultipartFile file) {
+        return postService.uploadImage(file);
     }
 }
