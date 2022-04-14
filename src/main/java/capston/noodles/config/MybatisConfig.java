@@ -23,11 +23,11 @@ public class MybatisConfig {
 
     @Value("com.mysql.cj.jdbc.Driver")
     private String driverClassName;
-    @Value("${spring.db.url}")
+    @Value("jdbc:mysql://db-noodles.cx3wdcqqylrw.ap-northeast-2.rds.amazonaws.com:3306/noodles_db?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowMultiQueries=true&allowPublicKeyRetrieval=true")
     private String url;
-    @Value("${spring.db.username}")
+    @Value("root")
     private String username;
-    @Value("${spring.db.password}")
+    @Value("noodles1100")
     private String password;
 
     public MybatisConfig(ApplicationContext applicationContext) {this.applicationContext = applicationContext;}
