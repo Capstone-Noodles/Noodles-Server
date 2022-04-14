@@ -1,23 +1,44 @@
 package capston.noodles.Post.service;
 
+import capston.noodles.Post.model.entity.dto.TotalUploadPostDto;
 import capston.noodles.Post.model.response.AllPostResponse;
 import capston.noodles.Post.model.response.OnePostResponse;
 import capston.noodles.Post.repository.PostRepository;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import com.amazonaws.services.s3.model.ObjectMetadata;
 
-import java.io.InputStream;
+import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
-    private final UploadService s3Service;
+    private AmazonS3 s3Client;
+
+    @Value("${cloud.aws.credentials.accessKey}")
+    private String accessKey;
+
+    @Value("${cloud.aws.credentials.secretKey}")
+    private String secretKey;
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+
+    @Value("${cloud.aws.region.static}")
+    private String region;
+
 
     public List<AllPostResponse> getAllPostInfo(double longitude, double latitude) {
         return postRepository.getAllPostInfo(longitude, latitude);
@@ -27,28 +48,32 @@ public class PostService {
         return postRepository.getOnePostInfo(postIdx);
     }
 
-    public String uploadImage(MultipartFile file) {
-        String fileName = createFileName(file.getOriginalFilename());   // 원래의 파일이름 가져오기(getOriginalFilename 얘는 내장함수인듯)
-        ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentLength(file.getSize());
-        objectMetadata.setContentType(file.getContentType());
-        try(InputStream inputStream = file.getInputStream()) {
-            s3Service.uploadFile(inputStream, objectMetadata, fileName);
-        } catch (IOException e) {
-            throw new IllegalArgumentException(String.format("파일 변환 중 에러가 발생했습니다. (%s)", file.getOriginalFilename()));
-        }
-        return s3Service.getFileUrl(fileName);
+    @PostConstruct
+    public void setS3Client() {
+        AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
+
+        s3Client = AmazonS3ClientBuilder.standard()
+                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .withRegion(this.region)
+                .build();
     }
 
-    private String createFileName(String originalFileName) {
-        return UUID.randomUUID().toString().concat(getFileExtension(originalFileName));
+    public String uploadImage(MultipartFile file) throws IOException {
+        String fileName = file.getOriginalFilename();
+
+        s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
+        return s3Client.getUrl(bucket, fileName).toString();
     }
 
-    private String getFileExtension(String fileName) {
-        try{
-            return fileName.substring(fileName.lastIndexOf("."));
-        } catch (StringIndexOutOfBoundsException e) {
-            throw new IllegalArgumentException(String.format("잘못된 형식의 파일(%s)입니다.", fileName));
+    @Transactional
+    public long postPost(TotalUploadPostDto totalUploadPostDto) {
+        Long ret = postRepository.postPost(totalUploadPostDto);
+        if (ret == null) {
+            throw new Error();
         }
+        postRepository.postImage(ret, totalUploadPostDto);
+
+        return ret;
     }
 }
