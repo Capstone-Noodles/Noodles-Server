@@ -6,6 +6,7 @@ import lombok.Data;
 public class TotalUploadPostDto extends UploadPostDto {
     private String image;
 
+
     static public TotalUploadPostDto toTotalUploadPostDto(UploadPostDto dto, String image) {
         TotalUploadPostDto totalUploadPostDto = new TotalUploadPostDto();
         totalUploadPostDto.setImage(image);

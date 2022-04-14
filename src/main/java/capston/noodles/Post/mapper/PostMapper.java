@@ -1,5 +1,7 @@
 package capston.noodles.Post.mapper;
 
+import capston.noodles.Post.model.entity.Post;
+import capston.noodles.Post.model.entity.PostImage;
 import capston.noodles.Post.model.entity.dto.TotalUploadPostDto;
 import capston.noodles.Post.model.response.AllPostResponse;
 import capston.noodles.Post.model.response.OnePostResponse;
@@ -12,6 +14,6 @@ import java.util.List;
 public interface PostMapper {
     List<AllPostResponse> getAllPostInfo(@Param("longitude") double longitude, @Param("latitude") double latitude);
     List<OnePostResponse> getOnePostInfo(@Param("postIdx") long postIdx);
-    Long postPost(TotalUploadPostDto totalUploadPostDto);
-    Long insertImage(@Param("postImageIdx") long postImageIdx, @Param("image") String image);
+    void postPost(Post post);
+    Long insertImage(PostImage postImage);
 }

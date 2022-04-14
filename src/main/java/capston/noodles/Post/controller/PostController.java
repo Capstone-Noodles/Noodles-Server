@@ -41,12 +41,9 @@ public class PostController {
     }
 
     @PostMapping("/posts/write")
-    public ResponseMessage uploadPost(@RequestBody UploadPostDto uploadPostDto, MultipartFile file) throws IOException {
+    public ResponseMessage uploadPost(@RequestPart(value = "uploadDto") UploadPostDto uploadPostDto, @RequestPart(value = "file") MultipartFile file) throws IOException {
 
-        String imgPath = postService.uploadImage(file);
-        TotalUploadPostDto totalUploadPostDto = TotalUploadPostDto.toTotalUploadPostDto(uploadPostDto, imgPath);
-        long postResult = postService.postPost(totalUploadPostDto);
-
+        postService.postPost(uploadPostDto, file);
         return new ResponseMessage("hi");
     }
 

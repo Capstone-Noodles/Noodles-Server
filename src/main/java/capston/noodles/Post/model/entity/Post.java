@@ -10,8 +10,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Post {
-    private int postIdx;
-    private int userIdx;
+    private Long postIdx;
+    private Long userIdx;
     private Date createdAt;
     private Date updatedAt;
     private String status;

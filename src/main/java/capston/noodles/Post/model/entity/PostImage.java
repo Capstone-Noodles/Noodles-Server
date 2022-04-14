@@ -15,5 +15,5 @@ public class PostImage {
     private Date updatedAt;
     private String status;
     private String image;
-    private int postIdx;
+    private Long postIdx;
 }
