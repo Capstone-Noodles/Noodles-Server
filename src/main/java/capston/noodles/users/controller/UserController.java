@@ -34,6 +34,7 @@ public class UserController {
 
     @PostMapping("/users")
     public ResponseMessage signup(@RequestBody SignupDto dto) {
+        System.out.println("here");
         User user = dto.toUser();
         int userIdx = userService.save(user);
         if (userIdx < 0){
