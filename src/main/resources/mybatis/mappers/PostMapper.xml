@@ -28,7 +28,7 @@
         where postIdx = #{postIdx};
     </select>
 
-    <insert id="postPost" parameterType = "TotalUploadPostDto" useGeneratedKeys="true" keyProperty="postIdx">
+    <insert id="postPost" parameterType = "capston.noodles.Post.model.entity.dto.TotalUploadPostDto" useGeneratedKeys="true" keyProperty="postIdx">
         insert into Post(location, latitude, longitude, content, userIdx)
         values(#{location}, #{latitude}, #{longitude}, #{content}, #{userIdx});
     </insert>
