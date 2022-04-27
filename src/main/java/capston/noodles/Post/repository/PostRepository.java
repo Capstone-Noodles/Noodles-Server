@@ -35,4 +35,8 @@ public class PostRepository {
         postMapper.insertImage(postImage);
         return;
     }
+
+    public void deletePost(long postIdx) {
+        postMapper.deletePost(postIdx);
+    }
 }

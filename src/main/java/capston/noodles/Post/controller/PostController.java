@@ -47,4 +47,10 @@ public class PostController {
         return new ResponseMessage("hi");
     }
 
+    @PatchMapping("/posts/delete/{postIdx}")
+    public  ResponseMessage deletePost(@PathVariable("postIdx") long postIdx) {
+        postService.deletePost(postIdx);
+        return new ResponseMessage("delete!!");
+    }
+
 }
