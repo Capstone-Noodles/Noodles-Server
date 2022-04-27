@@ -16,4 +16,5 @@ public interface PostMapper {
     List<OnePostResponse> getOnePostInfo(@Param("postIdx") long postIdx);
     void postPost(Post post);
     Long insertImage(PostImage postImage);
+    void deletePost(long postIdx);
 }

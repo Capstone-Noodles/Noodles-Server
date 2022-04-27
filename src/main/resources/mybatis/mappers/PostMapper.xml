@@ -37,4 +37,10 @@
         insert into PostImage(postImageIdx, image)
         values (#{postImageIdx}, #{image});
     </insert>
+
+    <update id="deletePost" parameterType="long">
+        update Post
+        set status = 'N'
+        where postIdx = #{postIdx};
+    </update>
 </mapper>
