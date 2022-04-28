@@ -33,17 +33,10 @@ public class PostController {
         return onePostList;
     }
 
-    @PostMapping("/upload")
-    public String uploadImage(MultipartFile file) throws IOException {
-        String imgPath = postService.uploadImage(file);
-
-        return imgPath;
-    }
-
     @PostMapping("/posts/write")
-    public ResponseMessage uploadPost(@RequestPart(value = "uploadDto") UploadPostDto uploadPostDto, @RequestPart(value = "file") MultipartFile file) throws IOException {
+    public ResponseMessage uploadPost(@RequestPart(value = "uploadDto") UploadPostDto uploadPostDto, @RequestParam("imageFileList") List<MultipartFile> imageFileList) throws IOException {
 
-        postService.postPost(uploadPostDto, file);
+        postService.postPost(uploadPostDto, imageFileList);
         return new ResponseMessage("hi");
     }
 
