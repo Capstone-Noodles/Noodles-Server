@@ -22,7 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -61,17 +63,23 @@ public class PostService {
                 .build();
     }
 
-    public String uploadImage(MultipartFile file) throws IOException {
-        String fileName = file.getOriginalFilename();
+    public List<String> uploadImage(List<MultipartFile> imageFileList) throws IOException {
+        List<String> urlList = new ArrayList<>();
 
-        s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
-        return s3Client.getUrl(bucket, fileName).toString();
+        for (MultipartFile file:imageFileList) {
+            String fileName = createFileName(file.getOriginalFilename());
+
+            s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+            String s = s3Client.getUrl(bucket, fileName).toString();
+            urlList.add(s);
+        }
+        return urlList;
     }
 
     @Transactional
-    public void postPost(UploadPostDto dto, MultipartFile file) throws IOException {
-        String imgPath = uploadImage(file);
+    public void postPost(UploadPostDto dto, List<MultipartFile> imageFileList) throws IOException {
+        List<String> urlList = uploadImage(imageFileList);
         Post post = dto.toPost();
         postRepository.postPost(post);
         Long postIdx = post.getPostIdx();
@@ -79,18 +87,28 @@ public class PostService {
             throw new Error();
         }
 
-        PostImage postImage = new PostImage();
-        postImage.setPostIdx(postIdx);
-        postImage.setImage(imgPath);
-        postRepository.postImage(postImage);
+        for (String imgPath:urlList) {
+            PostImage postImage = new PostImage();
+            postImage.setPostIdx(postIdx);
+            postImage.setImage(imgPath);
+            postRepository.postImage(postImage);
 
-        Long postImageIdx = postImage.getPostIdx();
+            Long postImageIdx = postImage.getPostIdx();
 
-        if (postImageIdx == null) {
-            throw new Error();
+            if (postImageIdx == null) {
+                throw new Error();
+            }
         }
 
         return;
+    }
+
+    private String createFileName(String originalFileName) {                            // 파일 이름 랜덤 생성
+        return UUID.randomUUID().toString().concat(getFileExtension(originalFileName));
+    }
+
+    private String getFileExtension(String fileName) {
+        return fileName.substring(fileName.lastIndexOf("."));
     }
 
     public void deletePost(long postIdx) {
