@@ -34,7 +34,6 @@ public class UserController {
 
     @PostMapping("/users")
     public ResponseMessage signup(@RequestBody SignupDto dto) {
-        System.out.println("here");
         User user = dto.toUser();
         int userIdx = userService.save(user);
         if (userIdx < 0){
@@ -47,6 +46,13 @@ public class UserController {
     @PostMapping("/reissue")
     public ResponseMessage<TokenDto> reissue(@RequestBody TokenRequestDto dto) {
         return new ResponseMessage<TokenDto>(userService.reissue(dto));
+    }
+
+    @GetMapping("/users/idCheck")
+    public ResponseMessage checkIdDuplicated(@RequestParam String id) {
+        userService.checkIdDuplicated(id);
+
+        return new ResponseMessage("회원가입이 가능합니다.");
     }
 
 //    @GetMapping("v1/test")

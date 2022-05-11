@@ -1,6 +1,7 @@
 package capston.noodles.common;
 
 import capston.noodles.common.response.ResponseMessage;
+import capston.noodles.users.exception.DuplicatedIdException;
 import capston.noodles.users.security.exception.AccessDeniedException;
 import capston.noodles.users.security.exception.CAuthenticationEntryPointException;
 import capston.noodles.users.exception.LoginIdNotFoundException;
@@ -43,6 +44,12 @@ public class ControllerAdvice {
     @ExceptionHandler(CRefreshTokenException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ResponseMessage refreshTokenException(HttpServletRequest request, CRefreshTokenException e) {
+        return new ResponseMessage(e.getMessage());
+    }
+
+    @ExceptionHandler(DuplicatedIdException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ResponseMessage duplicatedIdException(HttpServletRequest request,DuplicatedIdException e){
         return new ResponseMessage(e.getMessage());
     }
 }
