@@ -12,4 +12,5 @@ public interface UserMapper {
     void setRefreshToken(SetRefreshTokenDto dto);
 
     String getRefreshTokenByUserIdx(int userIdx);
+
 }

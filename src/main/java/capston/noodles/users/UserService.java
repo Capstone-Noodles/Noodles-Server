@@ -1,6 +1,8 @@
 package capston.noodles.users;
 
 import capston.noodles.common.ErrorCode;
+import capston.noodles.users.exception.DuplicatedIdException;
+import capston.noodles.users.exception.EmailLoginFailedException;
 import capston.noodles.users.exception.LoginIdNotFoundException;
 import capston.noodles.users.exception.LoginPwdNotCorrectException;
 import capston.noodles.users.model.dao.User;
@@ -45,7 +47,8 @@ public class UserService {
 
             return userRepository.insertUser(user);
         }
-        return -1;
+        throw new DuplicatedIdException("아이디가 중복되었습니다.");
+//        return -1;
     }
 
     @Transactional
@@ -122,5 +125,14 @@ public class UserService {
         );
 
         return newToken;
+    }
+
+    @Transactional
+    public void checkIdDuplicated(String id){
+        User findUser = userRepository.findByIdentification(id);
+        if (findUser != null) {
+            throw new DuplicatedIdException("아이디가 중복되었습니다.");
+        }
+        return;
     }
 }
