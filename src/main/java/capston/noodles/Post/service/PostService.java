@@ -45,8 +45,8 @@ public class PostService {
     private String region;
 
 
-    public List<AllPostResponse> getAllPostInfo(double longitude, double latitude) {
-        return postRepository.getAllPostInfo(longitude, latitude);
+    public List<AllPostResponse> getAllPostInfo(double longitude, double latitude, int userIdx) {
+        return postRepository.getAllPostInfo(longitude, latitude, userIdx);
     }
 
     public List<OnePostResponse> getOnePostInfo(long postIdx) {
