@@ -4,20 +4,42 @@
 
 <mapper namespace="capston.noodles.Post.mapper.PostMapper">
 
-    <select id="getAllPostInfo" parameterType = "double" resultType="AllPostResponse">
+    <select id="getAllPostInfo" parameterType = "map" resultType="AllPostResponse">
+
         set @location = POINT(#{longitude}, #{latitude});
         select p.postIdx, u.userIdx, u.profileImage, group_concat(pi.image) postImageList, p.location, p.content,
-        case
+        (case
         when <![CDATA[st_distance_sphere(@location, POINT(p.longitude, p.latitude)) < 1000]]>
         then concat(format(st_distance_sphere(@location, POINT(p.longitude, p.latitude)), 2), 'm')
         else
         concat(format(st_distance_sphere(@location, POINT(p.longitude, p.latitude)) * 0.001 , 2), 'km')
-        end as distance
+        end) as distance,
+        (select count(*)
+        from PostLike) as likes,
+        (case x.likeCnt
+        when 1 then 1
+        else 0
+        end) as isliked,
+        (case y.bookmark
+        when 1 then 1
+        else 0
+        end) as isBookmarked
         from Post p
-        join PostImage pi on pi.postIdx = p.postIdx
-        join UserInfo u on u.userIdx = p.userIdx
-        where <![CDATA[st_distance_sphere(@location, POINT(p.longitude, p.latitude)) < 10000]]>         #5km 미만만 보여줌
-        group by p.postIdx
+        join UserInfo u on p.userIdx = u.userIdx
+        join PostImage pi on p.postIdx = pi.postIdx
+        left join (select count(*) likeCnt, pl.postIdx
+                    from PostLike pl
+                    where pl.userIdx = #{userIdx}
+                    and pl.status = 'Y'
+                    ) x on x.postIdx = p.postIdx
+        left join (select count(*) bookmark, b.postIdx
+                    from Bookmark b
+                    where b.userIdx = #{userIdx}
+                    and b.status = 'Y'
+                    ) y on y.postIdx = p.postIdx
+        where <![CDATA[st_distance_sphere(@location, POINT(p.longitude, p.latitude)) < 20000]]>
+        and p.status = 'Y'
+        group by p.postIdx;
     </select>
 
     <select id="getOnePostInfo" parameterType = "long" resultType="OnePostResponse">

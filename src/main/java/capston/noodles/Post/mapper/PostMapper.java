@@ -12,7 +12,7 @@ import java.util.List;
 
 @Mapper
 public interface PostMapper {
-    List<AllPostResponse> getAllPostInfo(@Param("longitude") double longitude, @Param("latitude") double latitude);
+    List<AllPostResponse> getAllPostInfo(@Param("longitude") double longitude, @Param("latitude") double latitude, @Param("userIdx") int userIdx);
     List<OnePostResponse> getOnePostInfo(@Param("postIdx") long postIdx);
     void postPost(Post post);
     Long insertImage(PostImage postImage);
