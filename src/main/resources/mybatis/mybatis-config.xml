@@ -12,6 +12,7 @@
         <typeAlias type="capston.noodles.Post.model.response.AllPostResponse" alias="AllPostResponse"/>
         <typeAlias type="capston.noodles.Post.model.response.OnePostResponse" alias="OnePostResponse"/>
         <typeAlias type="capston.noodles.Comment.model.CommentRequest" alias="CommentRequest"/>
+        <typeAlias type="capston.noodles.Comment.model.CommentListResponse" alias="CommentListResponse"/>
 
     </typeAliases>
 </configuration>
