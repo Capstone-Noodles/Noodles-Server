@@ -6,9 +6,9 @@
 
 package capston.noodles.Follow.controller;
 
-import capston.noodles.Follow.model.dto.AddFollowResponseMessage;
 import capston.noodles.Follow.service.FollowService;
 import capston.noodles.common.response.ResponseMessage;
+import capston.noodles.common.response.ResponseSuccessMessage;
 import capston.noodles.users.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +35,7 @@ public class FollowController {
 
         followService.addFollow(toUserIdx, Long.parseLong(fromUserIdx));
 
-        return new ResponseMessage("팔로우 신청 완료");
+        return new ResponseMessage(new ResponseSuccessMessage(200,"팔로우 추가 성공"));
     }
 
     /**
