@@ -1,9 +1,12 @@
 package capston.noodles.Comment.repository;
 
 import capston.noodles.Comment.mapper.CommentMapper;
+import capston.noodles.Comment.model.CommentListResponse;
 import capston.noodles.Comment.model.CommentRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
@@ -16,5 +19,13 @@ public class CommentRepository {
             return 1;
         else
             return 0;
+    }
+
+    public List<CommentListResponse> getComments(long postIdx) {
+        return commentMapper.getComments(postIdx);
+    }
+
+    public List<CommentListResponse> getChildComments(int commentIdx) {
+        return commentMapper.getChildComments(commentIdx);
     }
 }
