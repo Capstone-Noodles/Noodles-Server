@@ -48,7 +48,6 @@ public class UserService {
             return userRepository.insertUser(user);
         }
         throw new DuplicatedIdException("아이디가 중복되었습니다.");
-//        return -1;
     }
 
     @Transactional
