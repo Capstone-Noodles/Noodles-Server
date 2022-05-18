@@ -29,24 +29,14 @@ public class FollowController {
      * @return
      */
     @PostMapping ("/follow/{toUserIdx}")
-    public ResponseMessage addFollow(@PathVariable("toUserIdx") long toUserIdx, HttpServletRequest request){
+    public ResponseMessage changeFollowStatus(@PathVariable("toUserIdx") long toUserIdx, HttpServletRequest request){
         String token = request.getHeader("x-auth-token");
         String fromUserIdx = jwtProvider.getUserPk(token);
 
-        followService.addFollow(toUserIdx, Long.parseLong(fromUserIdx));
+        followService.changeFollowStatus(toUserIdx, Long.parseLong(fromUserIdx));
 
-        return new ResponseMessage(new ResponseSuccessMessage(200,"팔로우 추가 성공"));
+        return new ResponseMessage(new ResponseSuccessMessage(200,"팔로우 추가 or 삭제 api 요청 성공"));
     }
 
-    /**
-     * 팔로우 중복 검사 테스트입니다.
-     */
-    @GetMapping("/follow/{toUserIdx}")
-    public String test(@PathVariable("toUserIdx") long toUserIdx, HttpServletRequest request) {
-        String token = request.getHeader("x-auth-token");
-        String fromUserIdx = jwtProvider.getUserPk(token);
 
-        followService.test(toUserIdx, Long.parseLong(fromUserIdx));
-        return "test";
-    }
 }

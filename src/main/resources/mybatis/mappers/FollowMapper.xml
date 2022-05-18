@@ -8,7 +8,10 @@
        Insert into Follow (status, userIdx, followingIdx)
         values(#{status}, #{userIdx}, #{followingIdx})
    </insert>
-    <select id="getFollowByUserIdxs" parameterType="capston.noodles.Follow.model.dao.Follow" resultType="Long">
-        select followIdx from Follow where userIdx=#{userIdx} and followingIdx=#{followingIdx}
+    <select id="getFollowByUserIdxs" parameterType="capston.noodles.Follow.model.dao.Follow" resultType="capston.noodles.Follow.model.dao.Follow">
+        select * from Follow where userIdx=#{userIdx} and followingIdx=#{followingIdx}
     </select>
+    <update id="updateFollowStatus" parameterType="capston.noodles.Follow.model.dao.Follow" >
+        update Follow set status = #{status} where followIdx = #{followIdx}
+    </update>
 </mapper>
