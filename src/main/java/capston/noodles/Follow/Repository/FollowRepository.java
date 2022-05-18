@@ -17,8 +17,13 @@ public class FollowRepository {
 
     }
 
-    public Long getFollowByUserIdxs(Follow follow){
+    public Follow getFollowByUserIdxs(Follow follow){
         return followMapper.getFollowByUserIdxs(follow);
+    }
+
+    public int updateFollowStatus(Follow follow) {
+        return followMapper.updateFollowStatus(follow);
+
     }
 
 }

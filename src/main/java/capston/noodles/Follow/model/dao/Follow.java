@@ -21,4 +21,13 @@ public class Follow {
 
         return follow;
     }
+
+    public void changeStatus(){
+        if (status == 'Y') {
+            status = 'N';
+        } else if (status == 'N') {
+            status = 'Y';
+        }
+        return;
+    }
 }

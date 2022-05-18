@@ -8,6 +8,8 @@ public interface FollowMapper {
 
     void save(Follow follow);
 
-    Long getFollowByUserIdxs(Follow follow);
+    Follow getFollowByUserIdxs(Follow follow);
+
+    int updateFollowStatus(Follow follow);
 
 }
