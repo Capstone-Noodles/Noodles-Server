@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="capston.noodles.Comment.mapper.CommentMapper">
+
+    <insert id="postComment" parameterType = "CommentRequest">
+        insert into Comment(content, postIdx, userIdx, parentCommentIdx)
+        values(#{content}, #{postIdx}, #{userIdx}, #{parentCommentIdx});
+    </insert>
+
+    <select id="getComments" parameterType="long" resultType="CommentListResponse">
+        select c.commentIdx, c.content, c.parentCommentIdx, ui.userIdx, ui.profileImage, c.createdAt as date
+        from Comment c
+        join UserInfo ui on c.userIdx = ui.userIdx
+        where c.status = 'Y'
+        and c.parentCommentIdx = 0
+        and c.postIdx = #{postIdx}
+    </select>
+
+    <select id="getChildComments" parameterType="int" resultType="CommentListResponse">
+        select c.commentIdx, c.content, c.parentCommentIdx, ui.userIdx, ui.profileImage, c.createdAt as date
+        from Comment c
+        join UserInfo ui on c.userIdx = ui.userIdx
+        where c.status = 'Y'
+        and c.parentCommentIdx = #{commentIdx}
+    </select>
+</mapper>

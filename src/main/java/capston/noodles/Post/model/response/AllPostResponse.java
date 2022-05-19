@@ -15,4 +15,7 @@ public class AllPostResponse {
     private String location;
     private String content;
     private String distance;
+    private int likes;
+    private int isLiked;
+    private int isBookmarked;
 }

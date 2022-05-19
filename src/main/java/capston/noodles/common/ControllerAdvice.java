@@ -1,5 +1,6 @@
 package capston.noodles.common;
 
+import capston.noodles.Follow.exception.ChangeFollowStatusException;
 import capston.noodles.common.response.ResponseMessage;
 import capston.noodles.users.exception.DuplicatedIdException;
 import capston.noodles.users.security.exception.AccessDeniedException;
@@ -49,7 +50,13 @@ public class ControllerAdvice {
 
     @ExceptionHandler(DuplicatedIdException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ResponseMessage duplicatedIdException(HttpServletRequest request,DuplicatedIdException e){
+    protected ResponseMessage duplicatedIdException(HttpServletRequest request, DuplicatedIdException e) {
+        return new ResponseMessage(e.getMessage());
+    }
+
+    @ExceptionHandler(ChangeFollowStatusException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ResponseMessage changeFollowStatusException(HttpServletRequest request, ChangeFollowStatusException e) {
         return new ResponseMessage(e.getMessage());
     }
 }

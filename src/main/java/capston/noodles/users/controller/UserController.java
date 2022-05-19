@@ -24,10 +24,7 @@ public class UserController {
 
     @PostMapping("/users/login")
     public ResponseMessage login(@RequestBody LoginRequestDto dto) {
-
-
         TokenDto result = userService.login(dto.getId(), dto.getPassword());
-
 
         return new ResponseMessage<TokenDto>(result);
     }
@@ -36,9 +33,6 @@ public class UserController {
     public ResponseMessage signup(@RequestBody SignupDto dto) {
         User user = dto.toUser();
         int userIdx = userService.save(user);
-        if (userIdx < 0){
-            return new ResponseMessage("회원 아이디가 중복되었습니다.");
-        }
 
         return new ResponseMessage(new LoginSuccess(userIdx));
     }
