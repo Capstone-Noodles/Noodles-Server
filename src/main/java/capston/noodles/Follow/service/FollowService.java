@@ -3,9 +3,12 @@ package capston.noodles.Follow.service;
 import capston.noodles.Follow.Repository.FollowRepository;
 import capston.noodles.Follow.exception.ChangeFollowStatusException;
 import capston.noodles.Follow.model.dao.Follow;
+import capston.noodles.Follow.model.dto.GetFollowResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -15,7 +18,7 @@ public class FollowService {
 
     @Transactional
     public void changeFollowStatus(Long toUserIdx, Long fromUserIdx) {
-        Follow follow = Follow.toFollow(toUserIdx, fromUserIdx);
+        Follow follow = Follow.toFollow(fromUserIdx, toUserIdx);
 
         // 기존에 존재하는 follow인지 가져오기
         Follow existFollow = isFollowExist(follow);
@@ -44,5 +47,10 @@ public class FollowService {
 
         return findFollow;
 
+    }
+
+    @Transactional
+    public List<GetFollowResponse> getFollow(Long userIdx){
+        return followRepository.selectAllFollowWithUserIdx(userIdx);
     }
 }

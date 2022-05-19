@@ -2,8 +2,11 @@ package capston.noodles.Follow.Repository;
 
 import capston.noodles.Follow.mapper.FollowMapper;
 import capston.noodles.Follow.model.dao.Follow;
+import capston.noodles.Follow.model.dto.GetFollowResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
@@ -26,4 +29,7 @@ public class FollowRepository {
 
     }
 
+    public List<GetFollowResponse> selectAllFollowWithUserIdx(Long userIdx){
+        return followMapper.selectAllFollowWithUserIdx(userIdx);
+    }
 }
