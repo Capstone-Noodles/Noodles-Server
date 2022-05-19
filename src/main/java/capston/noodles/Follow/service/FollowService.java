@@ -3,9 +3,12 @@ package capston.noodles.Follow.service;
 import capston.noodles.Follow.Repository.FollowRepository;
 import capston.noodles.Follow.exception.ChangeFollowStatusException;
 import capston.noodles.Follow.model.dao.Follow;
+import capston.noodles.Follow.model.dto.GetFollowResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -44,5 +47,10 @@ public class FollowService {
 
         return findFollow;
 
+    }
+
+    @Transactional
+    public List<GetFollowResponse> getFollow(Long userIdx){
+        return followRepository.selectAllFollowWithUserIdx(userIdx);
     }
 }

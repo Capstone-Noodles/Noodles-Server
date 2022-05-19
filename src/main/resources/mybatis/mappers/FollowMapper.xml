@@ -14,4 +14,10 @@
     <update id="updateFollowStatus" parameterType="capston.noodles.Follow.model.dao.Follow" >
         update Follow set status = #{status} where followIdx = #{followIdx}
     </update>
+    <select id="selectAllFollowWithUserIdx" parameterType="Long" resultType="GetFollowResponse">
+        select u.identification, u.profileImage from Follow f
+        join UserInfo u
+        on f.followingIdx = u.userIdx
+        where f.userIdx = #{userIdx}
+    </select>
 </mapper>
