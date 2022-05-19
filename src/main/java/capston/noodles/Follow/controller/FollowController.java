@@ -40,8 +40,27 @@ public class FollowController {
         return new ResponseMessage(new ResponseSuccessMessage(200, "팔로우 추가 or 삭제 api 요청 성공"));
     }
 
+
+    /**
+     *
+     * @param 팔로우 목록을 볼 상대의 userIdx를 쿼리파라미터로 받는다.
+     * @return uesrIdx를 가진 유저 팔로우 목록의 닉네임과 프로필 사진을 list로 리턴한다.
+     */
     @GetMapping("/follow/{userIdx}")
-    public ResponseMessage<List<GetFollowResponse>> getFollow(@PathVariable("userIdx") Long userIdx){
+    public ResponseMessage<List<GetFollowResponse>> getFollowForOthers(@PathVariable("userIdx") Long userIdx){
+        return new ResponseMessage<List<GetFollowResponse>>(followService.getFollow(userIdx));
+    }
+
+    /**
+     *
+     * 쿼리 파라미터로 아무것도 받지 않는다면 현재 로그인한 유저의 팔로우 목록을 가져온다.
+     * @return uesrIdx를 가진 유저 팔로우 목록의 닉네임과 프로필 사진을 list로 리턴한다.
+     */
+    @GetMapping("/follow")
+    public ResponseMessage<List<GetFollowResponse>> getFollowForMe(HttpServletRequest request){
+        String token = request.getHeader("x-auth-token");
+        String stringUserIdx = jwtProvider.getUserPk(token);
+        Long userIdx = Long.parseLong(stringUserIdx);
         return new ResponseMessage<List<GetFollowResponse>>(followService.getFollow(userIdx));
     }
 }
