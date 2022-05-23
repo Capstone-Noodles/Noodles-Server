@@ -7,7 +7,7 @@
     <select id="getAllPostInfo" parameterType = "map" resultType="AllPostResponse">
 
         set @location = POINT(#{longitude}, #{latitude});
-        select p.postIdx, u.userIdx, u.profileImage, group_concat(pi.image) postImageList, p.location, p.content,
+        select p.postIdx, u.userIdx, u.nickname, u.profileImage, group_concat(pi.image) postImageList, p.location, p.content,
         (case
         when <![CDATA[st_distance_sphere(@location, POINT(p.longitude, p.latitude)) < 1000]]>
         then concat(format(st_distance_sphere(@location, POINT(p.longitude, p.latitude)), 2), 'm')

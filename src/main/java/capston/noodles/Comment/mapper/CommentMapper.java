@@ -9,4 +9,5 @@ public interface CommentMapper {
     int postComment(CommentRequest commentRequest);
     List<CommentListResponse> getComments(long postIdx);
     List<CommentListResponse> getChildComments(int commentIdx);
+    Integer checkParentComment(Integer parentCommentIdx);
 }

@@ -4,6 +4,7 @@ import capston.noodles.Comment.model.CommentListResponse;
 import capston.noodles.Comment.model.CommentRequest;
 import capston.noodles.Comment.service.CommentService;
 import capston.noodles.common.response.ResponseMessage;
+import capston.noodles.common.response.ResponseSuccessMessage;
 import capston.noodles.users.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +20,18 @@ public class CommentController {
 
     // 댓글 작성 API
     @PostMapping("/comments")
-    public int postComment(@RequestBody CommentRequest commentRequest, HttpServletRequest request) {
+    public ResponseMessage postComment(@RequestBody CommentRequest commentRequest, HttpServletRequest request) {
         String token = request.getHeader("x-auth-token");
         String userIdx = jwtProvider.getUserPk(token);
         commentRequest.setUserIdx(Integer.parseInt(userIdx));
+
         int result = commentService.postComment(commentRequest);
-        return result;
+        if(result == 1) {
+            return new ResponseMessage(new ResponseSuccessMessage(200, "댓글달기 성공"));
+        }
+        else {
+            return new ResponseMessage("댓글달기 실패");
+        }
     }
 
     // 댓글 조회 API

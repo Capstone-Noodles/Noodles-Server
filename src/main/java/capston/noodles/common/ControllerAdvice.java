@@ -1,5 +1,6 @@
 package capston.noodles.common;
 
+import capston.noodles.Comment.exception.ParentCommentNotExist;
 import capston.noodles.Follow.exception.ChangeFollowStatusException;
 import capston.noodles.common.response.ResponseMessage;
 import capston.noodles.users.exception.DuplicatedIdException;
@@ -57,6 +58,12 @@ public class ControllerAdvice {
     @ExceptionHandler(ChangeFollowStatusException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ResponseMessage changeFollowStatusException(HttpServletRequest request, ChangeFollowStatusException e) {
+        return new ResponseMessage(e.getMessage());
+    }
+
+    @ExceptionHandler(ParentCommentNotExist.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ResponseMessage ParentCommentNotExist(HttpServletRequest request, ParentCommentNotExist e) {
         return new ResponseMessage(e.getMessage());
     }
 }

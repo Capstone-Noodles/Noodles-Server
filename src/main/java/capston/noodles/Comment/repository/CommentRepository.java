@@ -28,4 +28,9 @@ public class CommentRepository {
     public List<CommentListResponse> getChildComments(int commentIdx) {
         return commentMapper.getChildComments(commentIdx);
     }
+
+    public Integer checkParentComment(Integer parentCommentIdx) {
+        Integer result = commentMapper.checkParentComment(parentCommentIdx);
+        return result;
+    }
 }

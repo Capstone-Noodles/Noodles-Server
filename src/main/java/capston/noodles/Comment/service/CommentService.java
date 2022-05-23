@@ -1,5 +1,6 @@
 package capston.noodles.Comment.service;
 
+import capston.noodles.Comment.exception.ParentCommentNotExist;
 import capston.noodles.Comment.model.CommentListResponse;
 import capston.noodles.Comment.model.CommentRequest;
 import capston.noodles.Comment.repository.CommentRepository;
@@ -15,6 +16,13 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     public int postComment(CommentRequest commentRequest) {
+        if(commentRequest.getParentCommentIdx() != null ) {
+            Integer checkResult = commentRepository.checkParentComment(commentRequest.getParentCommentIdx());
+            if(checkResult == null) {
+                throw new ParentCommentNotExist("존재하지 않는 부모댓글입니다.");
+            }
+        }
+
         int result = commentRepository.postComment(commentRequest);
         return result;
     }

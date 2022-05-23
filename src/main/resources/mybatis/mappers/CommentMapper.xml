@@ -25,4 +25,10 @@
         where c.status = 'Y'
         and c.parentCommentIdx = #{commentIdx}
     </select>
+
+    <select id="checkParentComment" parameterType="Integer" resultType="Integer">
+        select c.commentIdx
+        from Comment c
+        where c.commentIdx = #{parentCommentIdx}
+    </select>
 </mapper>
