@@ -20,6 +20,6 @@
         join UserInfo u
         on f.followingIdx = u.userIdx
         where f.userIdx = #{userIdx}
-        and f.status = 'N'
+        and f.status = 'Y'
     </select>
 </mapper>

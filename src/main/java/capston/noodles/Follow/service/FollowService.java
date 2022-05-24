@@ -18,7 +18,7 @@ public class FollowService {
 
     @Transactional
     public void changeFollowStatus(Long toUserIdx, Long fromUserIdx) {
-        Follow follow = Follow.toFollow(fromUserIdx, toUserIdx);
+        Follow follow = Follow.toFollow(toUserIdx, fromUserIdx);
 
         // 기존에 존재하는 follow인지 가져오기
         Follow existFollow = isFollowExist(follow);
