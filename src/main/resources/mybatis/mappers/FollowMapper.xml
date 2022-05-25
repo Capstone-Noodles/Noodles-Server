@@ -15,11 +15,16 @@
         update Follow set status = #{status} where followIdx = #{followIdx}
     </update>
     <select id="selectAllFollowWithUserIdx" parameterType="Long" resultType="capston.noodles.Follow.model.dto.GetFollowResponse">
-        select u.nickname as nickname, u.profileImage as profileImage
-        from Follow f
-        join UserInfo u
-        on f.followingIdx = u.userIdx
-        where f.userIdx = #{userIdx}
-        and f.status = 'Y'
+        select UI.nickname, UI.profileImage, F.userIdx,
+               (case
+                    when F.userIdx in (select F2.followingIdx from Follow F2 where F2.status = 'Y')
+                        then 'T'
+                    else 'F'
+                   end) as isFollower
+        from Follow F
+                 join UserInfo UI on F.userIdx = UI.userIdx
+        where F.followingIdx = #{userIdx}
+          and F.status = 'Y'
+        order by F.updatedAt;
     </select>
 </mapper>

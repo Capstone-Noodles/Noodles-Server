@@ -122,4 +122,9 @@ public class PostService {
     public void deletePost(long postIdx) {
         postRepository.deletePost(postIdx);
     }
+
+    @Transactional
+    public List<AllPostResponse> getMyFollowerPosts(Long userPk) {
+        postRepository.getMyFollowerPosts(userPk);
+    }
 }

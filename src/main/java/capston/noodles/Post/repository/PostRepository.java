@@ -37,4 +37,8 @@ public class PostRepository {
     public void deletePost(long postIdx) {
         postMapper.deletePost(postIdx);
     }
+
+    public List<AllPostResponse> getMyFollowerPosts(Long userIdx) {
+        return postMapper.getMyFollowerPosts(userIdx);
+    }
 }

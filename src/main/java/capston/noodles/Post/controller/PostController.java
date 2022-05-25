@@ -59,4 +59,9 @@ public class PostController {
         return new ResponseMessage("delete!!");
     }
 
+    @GetMapping("/posts/following")
+    public ResponseMessage getMyFollowerPosts(HttpServletRequest request) {
+        Long userPk = jwtProvider.getUserPk(request);
+        postService.getMyFollowerPosts(userPk);
+    }
 }

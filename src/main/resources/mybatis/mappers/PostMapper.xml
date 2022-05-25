@@ -65,4 +65,8 @@
         set status = 'N'
         where postIdx = #{postIdx};
     </update>
+
+    <select id="getMyFollowerPosts" parameterType="Long" resultType="AllPostResponse">
+        select
+    </select>
 </mapper>
