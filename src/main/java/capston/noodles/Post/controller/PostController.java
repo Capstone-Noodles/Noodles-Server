@@ -42,6 +42,7 @@ public class PostController {
         return onePostList;
     }
 
+    // 게시물 업로드
     @PostMapping("/posts/write")
     public ResponseMessage uploadPost(@RequestPart(value = "uploadDto") UploadPostDto uploadPostDto, @RequestParam("imageFileList") List<MultipartFile> imageFileList) throws IOException {
 

@@ -13,6 +13,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -69,8 +70,12 @@ public class PostService {
         for (MultipartFile file:imageFileList) {
             String fileName = createFileName(file.getOriginalFilename());
 
-            s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
+            ObjectMetadata objectMetadata = new ObjectMetadata();                       // content-type 지정해주기 위한 코드
+            objectMetadata.setContentType(file.getContentType());
+
+            s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
+
             String s = s3Client.getUrl(bucket, fileName).toString();
             urlList.add(s);
         }
