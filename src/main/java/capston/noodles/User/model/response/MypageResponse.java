@@ -13,8 +13,10 @@ import lombok.NoArgsConstructor;
 public class MypageResponse {
     private String profileImage;
     private String nickname;
+    private String identification;
     private String description;
     private int following;
     private int follower;
     private String postIdxList;
+    private String imageList;
 }

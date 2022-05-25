@@ -5,6 +5,7 @@ import capston.noodles.User.model.response.MypageListResponse;
 import capston.noodles.User.model.response.MypageResponse;
 import capston.noodles.User.service.MypageService;
 import capston.noodles.common.response.ResponseMessage;
+import capston.noodles.users.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -20,10 +22,22 @@ import java.util.List;
 
 public class MypageController {
     private final MypageService mypageService;
+    private final JwtProvider jwtProvider;
 
     //마이페이지 정보 조회
     @GetMapping("/mypage/{userId}")
     public ResponseMessage<MypageListResponse> getUserInfo(@PathVariable("userId") long userId){
+        List<MypageResponse> mypageList = mypageService.getUserInfo(userId);
+
+        return new ResponseMessage<>(MypageListResponse.from(mypageList));
+    }
+
+    @GetMapping("/mypage")
+    public ResponseMessage<MypageListResponse> getMyInfo(HttpServletRequest request){
+        String token = request.getHeader("x-auth-token");
+        String userIdStr = jwtProvider.getUserPk(token);
+        Long userId = Long.parseLong(userIdStr);
+
         List<MypageResponse> mypageList = mypageService.getUserInfo(userId);
 
         return new ResponseMessage<>(MypageListResponse.from(mypageList));

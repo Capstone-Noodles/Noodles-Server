@@ -5,23 +5,22 @@
 <mapper namespace="capston.noodles.User.mapper.MypageMapper">
 
     <select id="getUserInfo" parameterType = "long" resultType="MypageResponse">
-        select u.profileImage, u.nickname, u.description, ifnull(0, x.following) following, ifnull(0, y.follower) follower, group_concat(p.postIdx) postIdxList
+        select u.profileImage, u.nickname, u.identification, u.description, ifnull(x.following, 0) following, ifnull(y.follower, 0) follower, group_concat(pi.postIdx) postIdxList, group_concat(pi.image) imageList
         from UserInfo u
                  left join (
             select count(f.userIdx) following, f.userIdx
             from Follow f
-            where f.status = 0
+            where f.status = 'Y'
             group by f.userIdx
         )x on x.userIdx = u.userIdx
                  left join (
             select count(f.followingIdx) follower, f.followingIdx
             from Follow f
-            where f.status = 0
+            where f.status = 'Y'
             group by f.followingIdx
         )y on y.followingIdx = u.userIdx
-                 left join Post p on p.userIdx = u.userIdx and p.status = 0
-        where u.status = 0
-          and u.userIdx = #{userId}
-        group by u.profileImage, x.following, y.follower
+                 left join Post p on p.userIdx = u.userIdx and p.status = 'Y' and p.isMain = 1
+                 left join PostImage pi on p.postIdx = pi.postIdx
+        where u.userIdx = #{userId};
     </select>
 </mapper>

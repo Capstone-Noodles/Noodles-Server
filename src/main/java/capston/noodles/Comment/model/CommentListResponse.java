@@ -14,6 +14,7 @@ public class CommentListResponse {
     private String content;
     private int parentCommentIdx;
     private int userIdx;
+    private String identification;
     private String profileImage;
     private String date;
 }

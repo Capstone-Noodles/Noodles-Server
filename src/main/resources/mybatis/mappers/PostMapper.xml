@@ -7,7 +7,7 @@
     <select id="getAllPostInfo" parameterType = "map" resultType="AllPostResponse">
 
         set @location = POINT(#{longitude}, #{latitude});
-        select p.postIdx, u.userIdx, u.nickname, u.profileImage, group_concat(pi.image) postImageList, p.location, p.content,
+        select p.postIdx, u.userIdx, u.identification, u.nickname, u.profileImage, group_concat(pi.image) postImageList, p.location, p.content,
         (case
         when <![CDATA[st_distance_sphere(@location, POINT(p.longitude, p.latitude)) < 1000]]>
         then concat(format(st_distance_sphere(@location, POINT(p.longitude, p.latitude)), 2), 'm')
@@ -15,7 +15,8 @@
         concat(format(st_distance_sphere(@location, POINT(p.longitude, p.latitude)) * 0.001 , 2), 'km')
         end) as distance,
         (select count(*)
-        from PostLike) as likes,
+        from PostLike pl
+         where pl.userIdx = #{userIdx}) as likes,
         (case x.likeCnt
         when 1 then 1
         else 0
@@ -39,7 +40,8 @@
                     ) y on y.postIdx = p.postIdx
         where <![CDATA[st_distance_sphere(@location, POINT(p.longitude, p.latitude)) < 20000]]>
         and p.status = 'Y'
-        group by p.postIdx;
+        group by p.postIdx
+        order by st_distance_sphere(@location, POINT(p.longitude, p.latitude));
     </select>
 
     <select id="getOnePostInfo" parameterType = "long" resultType="OnePostResponse">
