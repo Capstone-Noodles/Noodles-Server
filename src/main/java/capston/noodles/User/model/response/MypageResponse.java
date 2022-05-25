@@ -17,4 +17,5 @@ public class MypageResponse {
     private int following;
     private int follower;
     private String postIdxList;
+    private String imageList;
 }
