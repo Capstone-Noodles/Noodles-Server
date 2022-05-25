@@ -10,7 +10,7 @@
     </insert>
 
     <select id="getComments" parameterType="long" resultType="CommentListResponse">
-        select c.commentIdx, c.content, c.parentCommentIdx, ui.userIdx, ui.profileImage, c.createdAt as date
+        select c.commentIdx, c.content, c.parentCommentIdx, ui.userIdx, ui.identification, ui.profileImage, c.createdAt as date
         from Comment c
         join UserInfo ui on c.userIdx = ui.userIdx
         where c.status = 'Y'
