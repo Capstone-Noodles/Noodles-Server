@@ -28,5 +28,7 @@ public class MypageController {
 
         return new ResponseMessage<>(MypageListResponse.from(mypageList));
     }
+
+
 }
 

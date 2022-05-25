@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class AllPostResponse {
     private int postIdx;
     private int userIdx;
+    private String identification;
     private String nickname;
     private String profileImage;
     private String postImageList;
