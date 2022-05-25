@@ -15,7 +15,8 @@
         concat(format(st_distance_sphere(@location, POINT(p.longitude, p.latitude)) * 0.001 , 2), 'km')
         end) as distance,
         (select count(*)
-        from PostLike) as likes,
+        from PostLike pl
+         where pl.userIdx = #{userIdx}) as likes,
         (case x.likeCnt
         when 1 then 1
         else 0
