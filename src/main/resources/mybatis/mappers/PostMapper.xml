@@ -56,8 +56,8 @@
     </insert>
 
     <insert id="insertImage" parameterType="map" useGeneratedKeys="true" keyProperty="postImageIdx">
-        insert into PostImage(postImageIdx, image)
-        values (#{postImageIdx}, #{image});
+        insert into PostImage(postImageIdx, image, postIdx)
+        values (#{postImageIdx}, #{image}, #{postIdx});
     </insert>
 
     <update id="deletePost" parameterType="long">

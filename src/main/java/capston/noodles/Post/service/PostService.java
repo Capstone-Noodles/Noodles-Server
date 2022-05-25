@@ -83,9 +83,11 @@ public class PostService {
     }
 
     @Transactional
-    public void postPost(UploadPostDto dto, List<MultipartFile> imageFileList) throws IOException {
+    public void postPost(UploadPostDto dto, List<MultipartFile> imageFileList, long userIdx) throws IOException {
         List<String> urlList = uploadImage(imageFileList);
+
         Post post = dto.toPost();
+        post.setUserIdx(userIdx);
         postRepository.postPost(post);
         Long postIdx = post.getPostIdx();
         if (postIdx == null) {
@@ -98,7 +100,8 @@ public class PostService {
             postImage.setImage(imgPath);
             postRepository.postImage(postImage);
 
-            Long postImageIdx = postImage.getPostIdx();
+            Long postImageIdx = postImage.getPostImageIdx();
+            System.out.println(postImageIdx);
 
             if (postImageIdx == null) {
                 throw new Error();

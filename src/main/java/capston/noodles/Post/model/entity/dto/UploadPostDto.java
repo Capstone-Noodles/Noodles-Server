@@ -10,6 +10,7 @@ public class UploadPostDto {
     private double latitude;
     private String location;
     private String content;
+    private long userIdx;
 
     public Post toPost() {
         Post post = new Post();
@@ -17,6 +18,8 @@ public class UploadPostDto {
         post.setLatitude(latitude);
         post.setLocation(location);
         post.setContent(content);
+        post.setUserIdx(userIdx);
+        post.setStatus("Y");
         return post;
     }
 }

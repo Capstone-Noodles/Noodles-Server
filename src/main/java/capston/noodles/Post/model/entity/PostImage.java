@@ -10,7 +10,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostImage {
-    private int postImageIdx;
+    private Long postImageIdx;
     private Date createdAt;
     private Date updatedAt;
     private String status;

@@ -30,8 +30,6 @@ public class PostRepository {
     }
 
     public void postImage(PostImage postImage) {
-
-
         postMapper.insertImage(postImage);
         return;
     }
