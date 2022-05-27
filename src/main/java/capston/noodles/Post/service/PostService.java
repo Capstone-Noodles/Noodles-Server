@@ -125,8 +125,8 @@ public class PostService {
     }
 
     @Transactional
-    public List<AllPostResponse> getMyFollowerPosts(Long userPk, LocationDto dto) {
-        dto.setUserIdx(userPk);
+    public List<AllPostResponse> getMyFollowerPosts(Double longitude, Double latitude, Long userPk) {
+        LocationDto dto = new LocationDto(longitude, latitude, userPk);
         return postRepository.getMyFollowerPosts(dto);
     }
 }
