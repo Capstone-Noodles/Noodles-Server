@@ -64,11 +64,10 @@ public class PostController {
     }
 
     @GetMapping("/posts/following")
-    public ResponseMessage getMyFollowerPosts(HttpServletRequest request, @RequestBody LocationDto dto) {
+    public ResponseMessage getMyFollowerPosts(HttpServletRequest request, @RequestParam("longitude") Double longitude, @RequestParam("latitude") Double latitude) {
         Long userPk = jwtProvider.getUserPk(request);
-        dto.setUserIdx(userPk);
 
-        List<AllPostResponse> myFollowerPosts = postService.getMyFollowerPosts(userPk, dto);
+        List<AllPostResponse> myFollowerPosts = postService.getMyFollowerPosts(longitude, latitude, userPk);
         return new ResponseMessage(myFollowerPosts);
     }
 }
