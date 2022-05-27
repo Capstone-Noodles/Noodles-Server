@@ -110,4 +110,11 @@ public class JwtProvider {
             return false;
         }
     }
+
+    // request헤더에서 Jwt추출 후 jwt 토큰에서 회원 구분 Pk 추출
+    public Long getUserPk(HttpServletRequest request) {
+        String token = request.getHeader("x-auth-token");
+        String userIdxStr = getUserPk(token);
+        return Long.parseLong(userIdxStr);
+    }
 }

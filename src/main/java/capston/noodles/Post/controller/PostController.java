@@ -1,5 +1,6 @@
 package capston.noodles.Post.controller;
 
+import capston.noodles.Post.model.entity.dto.LocationDto;
 import capston.noodles.Post.model.entity.dto.TotalUploadPostDto;
 import capston.noodles.Post.model.entity.dto.UploadPostDto;
 import capston.noodles.Post.model.response.AllPostResponse;
@@ -7,7 +8,9 @@ import capston.noodles.Post.model.response.OnePostResponse;
 import capston.noodles.Post.service.PostService;
 import capston.noodles.common.response.ResponseMessage;
 import capston.noodles.users.security.JwtProvider;
+import com.amazonaws.Request;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
@@ -44,11 +47,12 @@ public class PostController {
 
     // 게시물 업로드
     @PostMapping("/posts/write")
+
     public ResponseMessage uploadPost(@RequestPart(value = "uploadDto") UploadPostDto uploadPostDto, @RequestPart("imageFileList") List<MultipartFile> imageFileList, HttpServletRequest request) throws IOException {
+
         String token = request.getHeader("x-auth-token");
         String userIdxStr = jwtProvider.getUserPk(token);
         long userIdx = Long.parseLong(userIdxStr);
-
         postService.postPost(uploadPostDto, imageFileList, userIdx);
         return new ResponseMessage("hi");
     }
@@ -59,4 +63,12 @@ public class PostController {
         return new ResponseMessage("delete!!");
     }
 
+    @GetMapping("/posts/following")
+    public ResponseMessage getMyFollowerPosts(HttpServletRequest request, @RequestBody LocationDto dto) {
+        Long userPk = jwtProvider.getUserPk(request);
+        dto.setUserIdx(userPk);
+
+        List<AllPostResponse> myFollowerPosts = postService.getMyFollowerPosts(userPk, dto);
+        return new ResponseMessage(myFollowerPosts);
+    }
 }

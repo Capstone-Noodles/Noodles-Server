@@ -67,4 +67,40 @@
         set status = 'N'
         where postIdx = #{postIdx};
     </update>
+
+    <select id="getMyFollowerPosts" parameterType="capston.noodles.Post.model.entity.dto.LocationDto" resultType="AllPostResponse">
+        set @location = POINT(#{longitude}, #{latitude});
+        select ui.userIdx, ui.nickname,ui.identification, ui.profileImage, p.postIdx, p.location, p.content,
+        (case
+        when <![CDATA[st_distance_sphere(@location, POINT(p.longitude, p.latitude)) < 1000]]>
+        then concat(format(st_distance_sphere(@location, POINT(p.longitude, p.latitude)), 2), 'm')
+        else
+        concat(format(st_distance_sphere(@location, POINT(p.longitude, p.latitude)) * 0.001 , 2), 'km')
+        end) as distance,
+        group_concat(pi.image) postImageList,
+        (select count(*)
+        from PostLike pl
+        where pl.postIdx = p.postIdx) as likes,
+        (case (select count(*) from PostLike pl
+        where pl.postIdx = p.postIdx
+        and pl.userIdx = ui.userIdx)
+        when 1 then 1
+        else 0
+        end
+        ) as isLiked,
+        (case (select count(*) from Bookmark bm
+        where bm.postIdx = p.postIdx
+        and bm.userIdx = ui.userIdx)
+        when 1 then 1
+        else 0
+        end
+        ) as isBookmarked
+        from Follow f
+        join UserInfo ui on ui.userIdx = f.userIdx
+        join Post p on ui.userIdx = p.userIdx
+        left join PostImage pi on p.postIdx = pi.postIdx
+        where f.followingIdx = #{userIdx}
+        group by p.postIdx
+        order by p.createdAt desc ;
+    </select>
 </mapper>

@@ -63,4 +63,6 @@ public class FollowController {
         Long userIdx = Long.parseLong(stringUserIdx);
         return new ResponseMessage<List<GetFollowResponse>>(followService.getFollow(userIdx));
     }
+
+
 }
