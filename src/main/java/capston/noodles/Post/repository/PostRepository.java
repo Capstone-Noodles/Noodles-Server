@@ -3,6 +3,7 @@ package capston.noodles.Post.repository;
 import capston.noodles.Post.mapper.PostMapper;
 import capston.noodles.Post.model.entity.Post;
 import capston.noodles.Post.model.entity.PostImage;
+import capston.noodles.Post.model.entity.dto.LocationDto;
 import capston.noodles.Post.model.entity.dto.TotalUploadPostDto;
 import capston.noodles.Post.model.response.AllPostResponse;
 import capston.noodles.Post.model.response.OnePostResponse;
@@ -38,7 +39,7 @@ public class PostRepository {
         postMapper.deletePost(postIdx);
     }
 
-    public List<AllPostResponse> getMyFollowerPosts(Long userIdx) {
-        return postMapper.getMyFollowerPosts(userIdx);
+    public List<AllPostResponse> getMyFollowerPosts(LocationDto dto) {
+        return postMapper.getMyFollowerPosts(dto);
     }
 }

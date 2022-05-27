@@ -2,6 +2,7 @@ package capston.noodles.Post.service;
 
 import capston.noodles.Post.model.entity.Post;
 import capston.noodles.Post.model.entity.PostImage;
+import capston.noodles.Post.model.entity.dto.LocationDto;
 import capston.noodles.Post.model.entity.dto.TotalUploadPostDto;
 import capston.noodles.Post.model.entity.dto.UploadPostDto;
 import capston.noodles.Post.model.response.AllPostResponse;
@@ -124,7 +125,8 @@ public class PostService {
     }
 
     @Transactional
-    public List<AllPostResponse> getMyFollowerPosts(Long userPk) {
-        postRepository.getMyFollowerPosts(userPk);
+    public List<AllPostResponse> getMyFollowerPosts(Long userPk, LocationDto dto) {
+        dto.setUserIdx(userPk);
+        return postRepository.getMyFollowerPosts(dto);
     }
 }

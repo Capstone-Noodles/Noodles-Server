@@ -2,6 +2,7 @@ package capston.noodles.Post.mapper;
 
 import capston.noodles.Post.model.entity.Post;
 import capston.noodles.Post.model.entity.PostImage;
+import capston.noodles.Post.model.entity.dto.LocationDto;
 import capston.noodles.Post.model.entity.dto.TotalUploadPostDto;
 import capston.noodles.Post.model.response.AllPostResponse;
 import capston.noodles.Post.model.response.OnePostResponse;
@@ -17,5 +18,5 @@ public interface PostMapper {
     void postPost(Post post);
     Long insertImage(PostImage postImage);
     void deletePost(long postIdx);
-    List<AllPostResponse> getMyFollowerPosts(Long userIdx);
+    List<AllPostResponse> getMyFollowerPosts(LocationDto dto);
 }
