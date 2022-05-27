@@ -47,7 +47,9 @@ public class PostController {
 
     // 게시물 업로드
     @PostMapping("/posts/write")
-    public ResponseMessage uploadPost(@Nullable @RequestPart(value = "uploadDto") UploadPostDto uploadPostDto, @RequestParam("imageFileList") List<MultipartFile> imageFileList, HttpServletRequest request) throws IOException {
+
+    public ResponseMessage uploadPost(@RequestPart(value = "uploadDto") UploadPostDto uploadPostDto, @RequestPart("imageFileList") List<MultipartFile> imageFileList, HttpServletRequest request) throws IOException {
+
         String token = request.getHeader("x-auth-token");
         String userIdxStr = jwtProvider.getUserPk(token);
         long userIdx = Long.parseLong(userIdxStr);
