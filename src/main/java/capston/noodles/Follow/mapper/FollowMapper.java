@@ -1,6 +1,7 @@
 package capston.noodles.Follow.mapper;
 
 import capston.noodles.Follow.model.dao.Follow;
+import capston.noodles.Follow.model.dto.GetFollowRequestDto;
 import capston.noodles.Follow.model.dto.GetFollowResponse;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -15,6 +16,8 @@ public interface FollowMapper {
 
     int updateFollowStatus(Follow follow);
 
-    List<GetFollowResponse> selectAllFollowWithUserIdx(Long userIdx);
+    List<GetFollowResponse> selectAllFollowerWithUserIdx(GetFollowRequestDto dto);
+
+    List<GetFollowResponse> selectAllFollowingWithUserIdx(GetFollowRequestDto dto);
 
 }

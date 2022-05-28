@@ -14,17 +14,38 @@
     <update id="updateFollowStatus" parameterType="capston.noodles.Follow.model.dao.Follow" >
         update Follow set status = #{status} where followIdx = #{followIdx}
     </update>
-    <select id="selectAllFollowWithUserIdx" parameterType="Long" resultType="capston.noodles.Follow.model.dto.GetFollowResponse">
-        select UI.nickname, UI.profileImage, F.userIdx,
-               (case
-                    when F.userIdx in (select F2.followingIdx from Follow F2 where F2.status = 'Y')
-                        then 'T'
-                    else 'F'
-                   end) as isFollower
-        from Follow F
-                 join UserInfo UI on F.userIdx = UI.userIdx
-        where F.followingIdx = #{userIdx}
-          and F.status = 'Y'
-        order by F.updatedAt;
+    <select id="selectAllFollowerWithUserIdx" parameterType="Long" resultType="capston.noodles.Follow.model.dto.GetFollowResponse">
+        select ui.userIdx, ui.nickname, ui.profileImage,
+            (case when ui.userIdx in
+                (select f2.followingIdx
+                    from Follow f2
+                    where f2.userIdx = #{myIdx}
+                    and f2.status = 'Y'
+                )
+            then 1
+            else 0
+            end) as isFollowing
+        from Follow f
+        join UserInfo ui on ui.userIdx = f.userIdx
+        where followingIdx = #{targetIdx}
+        and f.status = 'Y';
+    </select>
+
+    <select id="selectAllFollowingWithUserIdx" parameterType="Long" resultType="capston.noodles.Follow.model.dto.GetFollowResponse">
+        select ui.userIdx, ui.nickname, ui.profileImage,
+            (case when ui.userIdx in
+                (select f2.followingIdx
+                    from Follow f2
+                    where f2.userIdx = #{myIdx}
+                    and f2.status = 'Y'
+
+                )
+                then 1
+                else 0
+                end) as isFollowing
+        from Follow f
+        join UserInfo ui on ui.userIdx = f.followingIdx
+        where f.userIdx = #{targetIdx}
+        and f.status = 'Y';
     </select>
 </mapper>
