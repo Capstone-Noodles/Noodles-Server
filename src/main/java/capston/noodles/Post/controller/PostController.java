@@ -10,6 +10,7 @@ import capston.noodles.common.response.ResponseMessage;
 import capston.noodles.users.security.JwtProvider;
 import com.amazonaws.Request;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,14 +47,16 @@ public class PostController {
     }
 
     // 게시물 업로드
-    @PostMapping("/posts/write")
+    @PostMapping(path = "/posts/write", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 
-    public ResponseMessage uploadPost(@RequestPart(value = "uploadDto") UploadPostDto uploadPostDto, @RequestPart("imageFileList") List<MultipartFile> imageFileList, HttpServletRequest request) throws IOException {
+    public ResponseMessage uploadPost(@ModelAttribute UploadPostDto uploadDto, HttpServletRequest request) throws IOException {
 
+        System.out.println(uploadDto);
+        List<MultipartFile> imageFileList = uploadDto.getImageFileList();
         String token = request.getHeader("x-auth-token");
         String userIdxStr = jwtProvider.getUserPk(token);
         long userIdx = Long.parseLong(userIdxStr);
-        postService.postPost(uploadPostDto, imageFileList, userIdx);
+        postService.postPost(uploadDto, imageFileList, userIdx);
         return new ResponseMessage("hi");
     }
 
