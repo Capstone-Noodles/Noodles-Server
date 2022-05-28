@@ -16,7 +16,7 @@
         end) as distance,
         (select count(*)
         from PostLike pl
-         where pl.userIdx = #{userIdx}) as likes,
+         where pl.userIdx = #{userIdx} and p.postIdx = pl.postIdx) as likes,
         (case x.likeCnt
         when 1 then 1
         else 0
@@ -102,5 +102,37 @@
         where f.followingIdx = #{userIdx}
         group by p.postIdx
         order by p.createdAt desc ;
+    </select>
+
+    <select id="getMyPosts" parameterType="Long" resultType="AllPostResponse">
+        select p.postIdx, u.userIdx, u.identification, u.nickname, u.profileImage, group_concat(pi.image) postImageList, p.location, p.content,
+               (select count(*)
+                from PostLike pl
+                where pl.userIdx = #{userIdx} and pl.postIdx = p.postIdx) as likes,
+               (case x.likeCnt
+                    when 1 then 1
+                    else 0
+                   end) as isliked,
+               (case y.bookmark
+                    when 1 then 1
+                    else 0
+                   end) as isBookmarked
+        from Post p
+                 join UserInfo u on p.userIdx = u.userIdx
+                 join PostImage pi on p.postIdx = pi.postIdx
+                 left join (select count(*) likeCnt, pl.postIdx
+                            from PostLike pl
+                            where pl.userIdx = #{userIdx}
+                              and pl.status = 'Y'
+        ) x on x.postIdx = p.postIdx
+                 left join (select count(*) bookmark, b.postIdx
+                            from Bookmark b
+                            where b.userIdx = #{userIdx}
+                              and b.status = 'Y'
+        ) y on y.postIdx = p.postIdx
+        where p.status = 'Y'
+          and p.userIdx = #{userIdx}
+        group by p.postIdx
+        order by p.createdAt;
     </select>
 </mapper>

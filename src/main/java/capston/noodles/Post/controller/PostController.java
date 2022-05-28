@@ -70,4 +70,14 @@ public class PostController {
         List<AllPostResponse> myFollowerPosts = postService.getMyFollowerPosts(longitude, latitude, userPk);
         return new ResponseMessage(myFollowerPosts);
     }
+
+    // 내 게시물 조회 API
+    @GetMapping("/myPosts")
+    public ResponseMessage getMyPosts(HttpServletRequest request) {
+        Long userIdx = jwtProvider.getUserPk(request);
+
+        List<AllPostResponse> result = postService.getMyPosts(userIdx);
+        return new ResponseMessage(result);
+    }
+
 }

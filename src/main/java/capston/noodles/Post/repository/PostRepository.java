@@ -42,4 +42,8 @@ public class PostRepository {
     public List<AllPostResponse> getMyFollowerPosts(LocationDto dto) {
         return postMapper.getMyFollowerPosts(dto);
     }
+
+    public List<AllPostResponse> getMyPosts(Long userIdx) {
+        return postMapper.getMyPosts(userIdx);
+    }
 }

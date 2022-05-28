@@ -19,4 +19,5 @@ public interface PostMapper {
     Long insertImage(PostImage postImage);
     void deletePost(long postIdx);
     List<AllPostResponse> getMyFollowerPosts(LocationDto dto);
+    List<AllPostResponse> getMyPosts(Long userIdx);
 }

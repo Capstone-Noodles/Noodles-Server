@@ -129,4 +129,9 @@ public class PostService {
         LocationDto dto = new LocationDto(longitude, latitude, userPk);
         return postRepository.getMyFollowerPosts(dto);
     }
+
+    @Transactional
+    public List<AllPostResponse> getMyPosts(Long userIdx) {
+        return postRepository.getMyPosts(userIdx);
+    }
 }
