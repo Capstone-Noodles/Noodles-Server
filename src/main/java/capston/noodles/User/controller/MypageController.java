@@ -1,10 +1,12 @@
 package capston.noodles.User.controller;
 
 
+import capston.noodles.User.model.entity.dto.UpdateProfileDto;
 import capston.noodles.User.model.response.MypageListResponse;
 import capston.noodles.User.model.response.MypageResponse;
 import capston.noodles.User.service.MypageService;
 import capston.noodles.common.response.ResponseMessage;
+import capston.noodles.common.response.ResponseSuccessMessage;
 import capston.noodles.users.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,14 +28,14 @@ public class MypageController {
 
     //마이페이지 정보 조회
     @GetMapping("/mypage/{userId}")
-    public ResponseMessage<MypageListResponse> getUserInfo(@PathVariable("userId") long userId){
+    public ResponseMessage<MypageListResponse> getUserInfo(@PathVariable("userId") long userId) {
         List<MypageResponse> mypageList = mypageService.getUserInfo(userId);
 
         return new ResponseMessage<>(MypageListResponse.from(mypageList));
     }
 
     @GetMapping("/mypage")
-    public ResponseMessage<MypageListResponse> getMyInfo(HttpServletRequest request){
+    public ResponseMessage<MypageListResponse> getMyInfo(HttpServletRequest request) {
         String token = request.getHeader("x-auth-token");
         String userIdStr = jwtProvider.getUserPk(token);
         Long userId = Long.parseLong(userIdStr);
@@ -41,6 +43,16 @@ public class MypageController {
         List<MypageResponse> mypageList = mypageService.getUserInfo(userId);
 
         return new ResponseMessage<>(MypageListResponse.from(mypageList));
+    }
+
+    // 프로필 정보 변경
+    @PatchMapping("/mypage/profile")
+    public ResponseMessage updateMyProfile(HttpServletRequest request, @RequestBody UpdateProfileDto dto) {
+        Long userIdx = jwtProvider.getUserPk(request);
+        mypageService.updateProfile(userIdx, dto);
+
+        return new ResponseMessage(new ResponseSuccessMessage(200, "프로필 변경 성공!"));
+
     }
 }
 

@@ -1,6 +1,7 @@
 package capston.noodles.User.repository;
 
 import capston.noodles.User.mapper.MypageMapper;
+import capston.noodles.User.model.entity.dto.UpdateProfileDto;
 import capston.noodles.User.model.response.MypageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -14,5 +15,9 @@ public class MypageRepository {
 
     public List<MypageResponse> getUserInfo(long userId) {
         return mypageMapper.getUserInfo(userId);
+    }
+
+    public int updateProfile(UpdateProfileDto dto) {
+       return mypageMapper.updateProfile(dto);
     }
 }
