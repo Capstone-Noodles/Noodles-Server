@@ -6,6 +6,7 @@ import capston.noodles.Comment.service.CommentService;
 import capston.noodles.common.response.ResponseMessage;
 import capston.noodles.common.response.ResponseSuccessMessage;
 import capston.noodles.users.security.JwtProvider;
+import com.amazonaws.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,9 +22,8 @@ public class CommentController {
     // 댓글 작성 API
     @PostMapping("/comments")
     public ResponseMessage postComment(@RequestBody CommentRequest commentRequest, HttpServletRequest request) {
-        String token = request.getHeader("x-auth-token");
-        String userIdx = jwtProvider.getUserPk(token);
-        commentRequest.setUserIdx(Integer.parseInt(userIdx));
+        long userIdx = jwtProvider.getUserPk(request);
+        commentRequest.setUserIdx(userIdx);
 
         int result = commentService.postComment(commentRequest);
         if(result == 1) {
@@ -45,5 +45,30 @@ public class CommentController {
     public List<CommentListResponse> getChildComments(@PathVariable("commentIdx") int commentIdx) {
         List<CommentListResponse> commentList = commentService.getChildComments(commentIdx);
         return commentList;
+    }
+
+    // 댓글 삭제 API
+    @DeleteMapping("/comments/{commentIdx}")
+    public ResponseMessage deleteComment(@PathVariable("commentIdx") long commentIdx) {
+        int result = commentService.deleteComment(commentIdx);
+        if(result == 1) {
+            return new ResponseMessage(new ResponseSuccessMessage(200, "댓글 삭제 완료"));
+        }
+        else {
+            return new ResponseMessage("댓글 삭제 실패");
+        }
+    }
+
+    @PatchMapping("/comments/{commentIdx}")
+    public ResponseMessage updateComment(@PathVariable("commentIdx") long commentIdx, @RequestBody CommentRequest commentRequest, HttpServletRequest request) {
+        long userIdx = jwtProvider.getUserPk(request);
+        commentRequest.setUserIdx(userIdx);
+        int result = commentService.updateComment(commentIdx, commentRequest.getContent());
+        if(result == 1) {
+            return new ResponseMessage(new ResponseSuccessMessage(200, "댓글 수정 완료"));
+        }
+        else {
+            return new ResponseMessage("댓글 수정 실패");
+        }
     }
 }

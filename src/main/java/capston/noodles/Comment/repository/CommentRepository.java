@@ -33,4 +33,12 @@ public class CommentRepository {
         Integer result = commentMapper.checkParentComment(parentCommentIdx);
         return result;
     }
+
+    public int deleteComment(long commentIdx) {
+        return commentMapper.deleteComment(commentIdx);
+    }
+
+    public int updateComment(long commentIdx, String content) {
+        return commentMapper.updateComment(commentIdx, content);
+    }
 }

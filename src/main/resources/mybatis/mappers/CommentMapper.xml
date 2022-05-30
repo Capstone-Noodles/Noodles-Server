@@ -33,4 +33,16 @@
         from Comment c
         where c.commentIdx = #{parentCommentIdx}
     </select>
+
+    <update id="deleteComment" parameterType="long">
+        delete from Comment
+        where commentIdx = #{commentIdx}
+    </update>
+
+    <update id="updateComment" parameterType="map">
+        update Comment
+        set content = #{content}
+        where commentIdx = #{commentIdx}
+    </update>
+
 </mapper>

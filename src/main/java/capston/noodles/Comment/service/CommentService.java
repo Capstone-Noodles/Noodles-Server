@@ -35,4 +35,12 @@ public class CommentService {
         return commentRepository.getChildComments(commentIdx);
     }
 
+    public int deleteComment(long commentIdx) {
+        return commentRepository.deleteComment(commentIdx);
+    }
+
+    public int updateComment(long commentIdx, String content) {
+        return commentRepository.updateComment(commentIdx, content);
+    }
+
 }
