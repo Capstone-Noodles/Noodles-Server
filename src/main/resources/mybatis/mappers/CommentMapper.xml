@@ -14,16 +14,18 @@
         from Comment c
         join UserInfo ui on c.userIdx = ui.userIdx
         where c.status = 'Y'
-        and c.parentCommentIdx = 0
+        and c.parentCommentIdx is null
         and c.postIdx = #{postIdx}
+        order by 7
     </select>
 
     <select id="getChildComments" parameterType="int" resultType="CommentListResponse">
-        select c.commentIdx, c.content, c.parentCommentIdx, ui.userIdx, ui.profileImage, c.createdAt as date
+        select c.commentIdx, c.content, c.parentCommentIdx, ui.userIdx, ui.identification, ui.profileImage, c.createdAt as date
         from Comment c
         join UserInfo ui on c.userIdx = ui.userIdx
         where c.status = 'Y'
         and c.parentCommentIdx = #{commentIdx}
+        order by 7
     </select>
 
     <select id="checkParentComment" parameterType="Integer" resultType="Integer">
