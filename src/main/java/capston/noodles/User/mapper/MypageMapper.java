@@ -12,4 +12,6 @@ public interface MypageMapper {
     List<MypageResponse> getUserInfo(@Param("userId") long userId);
 
     int updateProfile(UpdateProfileDto dto);
+
+    String getImageByUserIdx(Long userIdx);
 }

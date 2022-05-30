@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Scanner;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,12 +48,13 @@ public class MypageController {
 
     // 프로필 정보 변경
     @PatchMapping("/mypage/profile")
-    public ResponseMessage updateMyProfile(HttpServletRequest request, @RequestBody UpdateProfileDto dto) {
+    public ResponseMessage updateMyProfile(HttpServletRequest request, @ModelAttribute UpdateProfileDto dto) {
         Long userIdx = jwtProvider.getUserPk(request);
         mypageService.updateProfile(userIdx, dto);
 
         return new ResponseMessage(new ResponseSuccessMessage(200, "프로필 변경 성공!"));
-
     }
 }
+
+
 

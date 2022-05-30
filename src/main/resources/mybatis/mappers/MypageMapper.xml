@@ -26,7 +26,14 @@
 
     <update id="updateProfile" parameterType="capston.noodles.User.model.entity.dto.UpdateProfileDto">
         update UserInfo
-        set nickname = #{nickname}, description = #{description}
+        set nickname = #{nickname}, description = #{description}, profileImage = #{profileImage}
         where userIdx = #{userIdx}
     </update>
+
+    <select id="getImageByUserIdx" parameterType="Long" resultType="String">
+        select profileImage
+        from UserInfo
+        where userIdx = #{userIdx}
+
+    </select>
 </mapper>
