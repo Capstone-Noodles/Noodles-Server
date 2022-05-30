@@ -20,4 +20,8 @@ public class MypageRepository {
     public int updateProfile(UpdateProfileDto dto) {
        return mypageMapper.updateProfile(dto);
     }
+
+    public String getImageByUserIdx(Long userIdx) {
+        return mypageMapper.getImageByUserIdx(userIdx);
+    }
 }

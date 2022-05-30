@@ -2,6 +2,7 @@ package capston.noodles.common;
 
 import capston.noodles.Comment.exception.ParentCommentNotExist;
 import capston.noodles.Follow.exception.ChangeFollowStatusException;
+import capston.noodles.common.S3.S3Exception;
 import capston.noodles.common.response.ResponseMessage;
 import capston.noodles.users.exception.DuplicatedIdException;
 import capston.noodles.users.security.exception.AccessDeniedException;
@@ -64,6 +65,12 @@ public class ControllerAdvice {
     @ExceptionHandler(ParentCommentNotExist.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ResponseMessage ParentCommentNotExist(HttpServletRequest request, ParentCommentNotExist e) {
+        return new ResponseMessage(e.getMessage());
+    }
+
+    @ExceptionHandler(S3Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ResponseMessage s3Exception(HttpServletRequest request, S3Exception e) {
         return new ResponseMessage(e.getMessage());
     }
 }
