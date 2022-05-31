@@ -4,6 +4,37 @@
 
 <mapper namespace="capston.noodles.User.mapper.MypageMapper">
 
+    <select id="getFriendUserInfo" parameterType = "map" resultType="MypageResponse">
+        select u.profileImage, u.nickname, u.identification, u.description, ifnull(x.following, 0) following, ifnull(y.follower, 0) follower, group_concat(pi.postIdx) postIdxList, group_concat(pi.image) imageList
+             ,(case z.followCnt
+                   when 1 then 1
+                   else 0
+            end) as isFollowed
+        from UserInfo u
+                 left join (
+            select count(f.userIdx) following, f.userIdx
+            from Follow f
+            where f.status = 'Y'
+            group by f.userIdx
+        )x on x.userIdx = u.userIdx
+                 left join (
+            select count(f.followingIdx) follower, f.followingIdx
+            from Follow f
+            where f.status = 'Y'
+            group by f.followingIdx
+        )y on y.followingIdx = u.userIdx
+                 left join Post p on p.userIdx = u.userIdx and p.status = 'Y' and p.isMain = 1
+                 left join PostImage pi on p.postIdx = pi.postIdx
+                 left join (
+            select count(*) followCnt, f.followingIdx
+            from Follow f
+            where f.userIdx = #{myIdx}
+              and f.status = 'Y'
+            group by f.followingIdx
+        )z on z.followingIdx = u.userIdx
+        where u.userIdx = #{userId};
+    </select>
+
     <select id="getUserInfo" parameterType = "long" resultType="MypageResponse">
         select u.profileImage, u.nickname, u.identification, u.description, ifnull(x.following, 0) following, ifnull(y.follower, 0) follower, group_concat(pi.postIdx) postIdxList, group_concat(pi.image) imageList
         from UserInfo u
@@ -23,6 +54,7 @@
                  left join PostImage pi on p.postIdx = pi.postIdx
         where u.userIdx = #{userId};
     </select>
+
 
     <update id="updateProfile" parameterType="capston.noodles.User.model.entity.dto.UpdateProfileDto">
         update UserInfo

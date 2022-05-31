@@ -13,6 +13,10 @@ import java.util.List;
 public class MypageRepository {
     private final MypageMapper mypageMapper;
 
+    // 친구꺼
+    public List<MypageResponse> getUserInfo(long userId, long myIdx) {
+        return mypageMapper.getFriendUserInfo(userId, myIdx);
+    }
     public List<MypageResponse> getUserInfo(long userId) {
         return mypageMapper.getUserInfo(userId);
     }

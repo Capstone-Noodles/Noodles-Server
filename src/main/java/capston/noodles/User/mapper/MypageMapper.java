@@ -9,7 +9,8 @@ import java.util.List;
 
 @Mapper
 public interface MypageMapper {
-    List<MypageResponse> getUserInfo(@Param("userId") long userId);
+    List<MypageResponse> getFriendUserInfo(@Param("userId") long userId, @Param("myIdx") long myIdx);
+    List<MypageResponse> getUserInfo(long userId);
 
     int updateProfile(UpdateProfileDto dto);
 
