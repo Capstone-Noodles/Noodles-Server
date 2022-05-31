@@ -44,12 +44,42 @@
         order by 10, 1 DESC
     </select>
 
-    <select id="getOnePostInfo" parameterType = "long" resultType="OnePostResponse">
-        select date_format(P.createdAt, '%Y-%m-%d %T') as createdAt, P.location, P.latitude, P.longitude, P.content,
-               (select nickname from UserInfo UI where P.userIdx = UI.userIdx) as nickname,
-               (select profileImage from UserInfo UI where P.userIdx = UI.userIdx) as profilImg
-        from Post P
-        where postIdx = #{postIdx};
+    <select id="getOnePostInfo" parameterType = "capston.noodles.Post.model.entity.dto.OnePostDto" resultType="AllPostResponse">
+        set @location = POINT(#{longitude}, #{latitude});
+        select p.createdAt, p.postIdx, u.userIdx, u.identification, u.nickname, u.profileImage, group_concat(pi.image) postImageList, p.location, p.content,
+               (case
+                    when <![CDATA[st_distance_sphere(@location, POINT(p.longitude, p.latitude)) < 1000]]>
+                        then concat(format(st_distance_sphere(@location, POINT(p.longitude, p.latitude)), 2), 'm')
+                    else
+                        concat(format(st_distance_sphere(@location, POINT(p.longitude, p.latitude)) * 0.001 , 2), 'km')
+                   end) as distance,
+               (select count(*)
+                from PostLike pl
+                where pl.userIdx = #{userIdx} and p.postIdx = pl.postIdx) as likes,
+               (case x.likeCnt
+                    when 1 then 1
+                    else 0
+                   end) as isliked,
+               (case y.bookmark
+                    when 1 then 1
+                    else 0
+                   end) as isBookmarked
+        from Post p
+                 join UserInfo u on p.userIdx = u.userIdx
+                 join PostImage pi on p.postIdx = pi.postIdx
+                 left join (select count(*) likeCnt, pl.postIdx
+                            from PostLike pl
+                            where pl.userIdx = #{userIdx}
+                              and pl.status = 'Y'
+        ) x on x.postIdx = p.postIdx
+                 left join (select count(*) bookmark, b.postIdx
+                            from Bookmark b
+                            where b.userIdx = #{userIdx}
+                              and b.status = 'Y'
+        ) y on y.postIdx = p.postIdx
+        where <![CDATA[st_distance_sphere(@location, POINT(p.longitude, p.latitude)) < 20000]]>
+          and p.status = 'Y' and p.postIdx = #{postIdx}
+        group by p.postIdx
     </select>
 
     <insert id="postPost" parameterType = "capston.noodles.Post.model.entity.dto.TotalUploadPostDto" useGeneratedKeys="true" keyProperty="postIdx">
@@ -135,4 +165,6 @@
         group by p.postIdx
         order by p.createdAt;
     </select>
+
+
 </mapper>

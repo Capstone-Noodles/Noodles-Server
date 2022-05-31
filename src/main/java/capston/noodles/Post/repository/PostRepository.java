@@ -4,10 +4,12 @@ import capston.noodles.Post.mapper.PostMapper;
 import capston.noodles.Post.model.entity.Post;
 import capston.noodles.Post.model.entity.PostImage;
 import capston.noodles.Post.model.entity.dto.LocationDto;
+import capston.noodles.Post.model.entity.dto.OnePostDto;
 import capston.noodles.Post.model.entity.dto.TotalUploadPostDto;
 import capston.noodles.Post.model.response.AllPostResponse;
 import capston.noodles.Post.model.response.OnePostResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.annotations.One;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,8 +23,8 @@ public class PostRepository {
         return postMapper.getAllPostInfo(longitude, latitude, userIdx);
     }
 
-    public List<OnePostResponse> getOnePostInfo(long postIdx) {
-        return postMapper.getOnePostInfo(postIdx);
+    public List<AllPostResponse> getOnePostInfo(OnePostDto dto) {
+        return postMapper.getOnePostInfo(dto);
     }
 
     public void postPost(Post post) {
@@ -46,4 +48,6 @@ public class PostRepository {
     public List<AllPostResponse> getMyPosts(Long userIdx) {
         return postMapper.getMyPosts(userIdx);
     }
+
+    public void likePost(long userIdx, long postIdx) { postMapper.likePost(userIdx, postIdx); }
 }
