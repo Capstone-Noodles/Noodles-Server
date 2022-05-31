@@ -27,14 +27,15 @@ public class MypageController {
     private final MypageService mypageService;
     private final JwtProvider jwtProvider;
 
-    //마이페이지 정보 조회
+    //마이페이지 정보 조회(친구꺼)
     @GetMapping("/mypage/{userId}")
-    public ResponseMessage<MypageListResponse> getUserInfo(@PathVariable("userId") long userId) {
-        List<MypageResponse> mypageList = mypageService.getUserInfo(userId);
+    public ResponseMessage<MypageListResponse> getUserInfo(@PathVariable("userId") long userId, HttpServletRequest request) {
+
+        long myIdx = jwtProvider.getUserPk(request);
+        List<MypageResponse> mypageList = mypageService.getUserInfo(userId, myIdx);
 
         return new ResponseMessage<>(MypageListResponse.from(mypageList));
     }
-
     @GetMapping("/mypage")
     public ResponseMessage<MypageListResponse> getMyInfo(HttpServletRequest request) {
         String token = request.getHeader("x-auth-token");

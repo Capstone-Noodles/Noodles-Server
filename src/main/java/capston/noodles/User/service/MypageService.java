@@ -18,7 +18,10 @@ public class MypageService {
     private final MypageRepository mypageRepository;
     private final S3Service s3Service;
 
-    // 마이페이지 정보 조회
+    // 마이페이지 정보 조회(친구꺼)
+    public List<MypageResponse> getUserInfo(long userId, long myIdx) {
+        return mypageRepository.getUserInfo(userId, myIdx);
+    }
     public List<MypageResponse> getUserInfo(long userId) {
         return mypageRepository.getUserInfo(userId);
     }

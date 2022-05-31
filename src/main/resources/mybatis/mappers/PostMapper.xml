@@ -41,7 +41,7 @@
         where <![CDATA[st_distance_sphere(@location, POINT(p.longitude, p.latitude)) < 20000]]>
         and p.status = 'Y'
         group by p.postIdx
-        order by 10, 1 DESC
+        order by st_distance_sphere(@location, POINT(p.longitude, p.latitude)), 1 DESC;
     </select>
 
     <select id="getOnePostInfo" parameterType = "capston.noodles.Post.model.entity.dto.OnePostDto" resultType="AllPostResponse">
