@@ -40,17 +40,17 @@ public class PostController {
 
     // 게시물 하나 조회
     @GetMapping("/posts/{postIdx}")
-    public List<OnePostResponse> getOnePostInfo(@PathVariable("postIdx") long postIdx) {
-        List<OnePostResponse> onePostList = postService.getOnePostInfo(postIdx);
+    public AllPostResponse getOnePostInfo(@PathVariable("postIdx") long postIdx, @RequestParam("longitude") double longitude, @RequestParam("latitude") double latitude, HttpServletRequest request) {
+        Long userIdx = jwtProvider.getUserPk(request);
+        List<AllPostResponse> onePostList = postService.getOnePostInfo(longitude, latitude, userIdx, postIdx);
 
-        return onePostList;
+        return onePostList.get(0);
     }
 
     // 게시물 업로드
     @PostMapping(path = "/posts/write", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 
     public ResponseMessage uploadPost(@ModelAttribute UploadPostDto uploadDto, HttpServletRequest request) throws IOException {
-
         System.out.println(uploadDto);
         List<MultipartFile> imageFileList = uploadDto.getImageFileList();
         String token = request.getHeader("x-auth-token");
@@ -81,6 +81,15 @@ public class PostController {
 
         List<AllPostResponse> result = postService.getMyPosts(userIdx);
         return new ResponseMessage(result);
+    }
+
+    // 게시물 좋아요 API
+    @PostMapping("/posts/like/{postIdx}")
+    public  ResponseMessage likePost(@PathVariable("postIdx") long postIdx, HttpServletRequest request) {
+        Long userIdx = jwtProvider.getUserPk(request);
+
+        postService.likePost(userIdx, postIdx);
+        return new ResponseMessage("success like");
     }
 
 }

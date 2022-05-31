@@ -3,6 +3,7 @@ package capston.noodles.Post.service;
 import capston.noodles.Post.model.entity.Post;
 import capston.noodles.Post.model.entity.PostImage;
 import capston.noodles.Post.model.entity.dto.LocationDto;
+import capston.noodles.Post.model.entity.dto.OnePostDto;
 import capston.noodles.Post.model.entity.dto.TotalUploadPostDto;
 import capston.noodles.Post.model.entity.dto.UploadPostDto;
 import capston.noodles.Post.model.response.AllPostResponse;
@@ -17,6 +18,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.annotations.One;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,8 +53,9 @@ public class PostService {
         return postRepository.getAllPostInfo(longitude, latitude, userIdx);
     }
 
-    public List<OnePostResponse> getOnePostInfo(long postIdx) {
-        return postRepository.getOnePostInfo(postIdx);
+    public List<AllPostResponse> getOnePostInfo(double longitude, double latitude, long userIdx, long postIdx) {
+        OnePostDto dto = new OnePostDto(longitude, latitude, userIdx, postIdx);
+        return postRepository.getOnePostInfo(dto);
     }
 
     @PostConstruct
@@ -133,5 +136,21 @@ public class PostService {
     @Transactional
     public List<AllPostResponse> getMyPosts(Long userIdx) {
         return postRepository.getMyPosts(userIdx);
+    }
+
+    @Transactional
+    public void likePost(long userIdx, long postIdx) {
+        String status = postRepository.getPostLikeByUser(userIdx, postIdx);
+        if (status == null) {
+            postRepository.postLike(userIdx, postIdx);
+        } else {
+            char state;
+            if (status.equals("Y")) {
+                state = 'N';
+            } else {
+                state = 'Y';
+            }
+            postRepository.updateLike(userIdx, postIdx, state);
+        }
     }
 }
