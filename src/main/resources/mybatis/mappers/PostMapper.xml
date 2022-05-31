@@ -17,7 +17,9 @@
         (select count(*)
         from PostLike pl
          where pl.userIdx = #{userIdx} and p.postIdx = pl.postIdx) as likes,
-        (case x.likeCnt
+        (case (select count(*)
+               from PostLike pl
+               where pl.userIdx = #{userIdx} and pl.status = 'Y' and pl.postIdx = p.postIdx)
         when 1 then 1
         else 0
         end) as isliked,
@@ -28,11 +30,6 @@
         from Post p
         join UserInfo u on p.userIdx = u.userIdx
         join PostImage pi on p.postIdx = pi.postIdx
-        left join (select count(*) likeCnt, pl.postIdx
-                    from PostLike pl
-                    where pl.userIdx = #{userIdx}
-                    and pl.status = 'Y'
-                    ) x on x.postIdx = p.postIdx
         left join (select count(*) bookmark, b.postIdx
                     from Bookmark b
                     where b.userIdx = #{userIdx}
