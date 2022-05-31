@@ -49,5 +49,10 @@ public class PostRepository {
         return postMapper.getMyPosts(userIdx);
     }
 
-    public void likePost(long userIdx, long postIdx) { postMapper.likePost(userIdx, postIdx); }
+    public String getPostLikeByUser(long userIdx, long postIdx) {
+        return postMapper.getPostLikeByUser(userIdx, postIdx);
+    }
+
+    public void postLike(long userIdx, long postIdx) { postMapper.postLike(userIdx, postIdx); }
+    public void updateLike(long userIdx, long postIdx, char status) { postMapper.updateLike(userIdx, postIdx, status); }
 }

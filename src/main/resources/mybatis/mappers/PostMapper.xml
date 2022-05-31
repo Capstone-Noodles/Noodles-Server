@@ -166,5 +166,21 @@
         order by p.createdAt;
     </select>
 
+    <select id="getPostLikeByUser" parameterType="long" resultType="string">
+        select status from PostLike
+        where userIdx = #{userIdx}
+          and postIdx = #{postIdx};
+    </select>
+
+    <insert id="postLike" parameterType = "map">
+        insert into PostLike(status, postIdx, userIdx)
+        values('Y', #{postIdx}, #{userIdx});
+    </insert>
+
+    <update id="updateLike" parameterType="map">
+        update PostLike
+        set status = #{state}
+        where postIdx = #{postIdx} and userIdx = #{userIdx};
+    </update>
 
 </mapper>

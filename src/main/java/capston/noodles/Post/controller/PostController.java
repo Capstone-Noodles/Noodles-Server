@@ -89,7 +89,7 @@ public class PostController {
         Long userIdx = jwtProvider.getUserPk(request);
 
         postService.likePost(userIdx, postIdx);
-        return new ResponseMessage("delete!!");
+        return new ResponseMessage("success like");
     }
 
 }

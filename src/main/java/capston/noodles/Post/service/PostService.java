@@ -139,5 +139,18 @@ public class PostService {
     }
 
     @Transactional
-    public void likePost(long userIdx, long postIdx) { postRepository.likePost(userIdx, postIdx); }
+    public void likePost(long userIdx, long postIdx) {
+        String status = postRepository.getPostLikeByUser(userIdx, postIdx);
+        if (status == null) {
+            postRepository.postLike(userIdx, postIdx);
+        } else {
+            char state;
+            if (status.equals("Y")) {
+                state = 'N';
+            } else {
+                state = 'Y';
+            }
+            postRepository.updateLike(userIdx, postIdx, state);
+        }
+    }
 }
