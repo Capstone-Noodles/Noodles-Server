@@ -1,7 +1,9 @@
 package capston.noodles.Post.mapper;
 
+import capston.noodles.Post.model.entity.Hashtag;
 import capston.noodles.Post.model.entity.Post;
 import capston.noodles.Post.model.entity.PostImage;
+import capston.noodles.Post.model.entity.dto.InsertHashtagDto;
 import capston.noodles.Post.model.entity.dto.LocationDto;
 import capston.noodles.Post.model.entity.dto.OnePostDto;
 import capston.noodles.Post.model.entity.dto.TotalUploadPostDto;
@@ -24,4 +26,6 @@ public interface PostMapper {
     String getPostLikeByUser(@Param("userIdx") long userIdx, @Param("postIdx") long postIdx);
     void postLike(@Param("userIdx") long userIdx, @Param("postIdx") long postIdx);
     void updateLike(@Param("userIdx") long userIdx, @Param("postIdx") long postIdx,  @Param("state") char state);
+
+    void insertHashtag(Hashtag hashtag);
 }

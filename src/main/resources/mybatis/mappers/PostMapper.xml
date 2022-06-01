@@ -180,4 +180,8 @@
         where postIdx = #{postIdx} and userIdx = #{userIdx};
     </update>
 
+    <insert id="insertHashtag" parameterType="capston.noodles.Post.model.entity.dto.InsertHashtagDto">
+        insert into Hashtag(hashtagWord, postIdx)
+        values(#{hashtagWord}, #{postIdx});
+    </insert>
 </mapper>

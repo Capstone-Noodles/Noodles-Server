@@ -5,6 +5,7 @@ import capston.noodles.Post.model.entity.PostImage;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -13,8 +14,9 @@ public class UploadPostDto {
     private double latitude;
     private String location;
     private String content;
-    private long userIdx;
+    private Long userIdx;
     private List<MultipartFile> imageFileList;
+    private List<String> hashtagWordList = new ArrayList<>();
 
     public Post toPost() {
         Post post = new Post();

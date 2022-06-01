@@ -1,8 +1,10 @@
 package capston.noodles.Post.repository;
 
 import capston.noodles.Post.mapper.PostMapper;
+import capston.noodles.Post.model.entity.Hashtag;
 import capston.noodles.Post.model.entity.Post;
 import capston.noodles.Post.model.entity.PostImage;
+import capston.noodles.Post.model.entity.dto.InsertHashtagDto;
 import capston.noodles.Post.model.entity.dto.LocationDto;
 import capston.noodles.Post.model.entity.dto.OnePostDto;
 import capston.noodles.Post.model.entity.dto.TotalUploadPostDto;
@@ -55,4 +57,8 @@ public class PostRepository {
 
     public void postLike(long userIdx, long postIdx) { postMapper.postLike(userIdx, postIdx); }
     public void updateLike(long userIdx, long postIdx, char status) { postMapper.updateLike(userIdx, postIdx, status); }
+
+    public void insertHashtag(Hashtag hashtag) {
+        postMapper.insertHashtag(hashtag);
+    }
 }
