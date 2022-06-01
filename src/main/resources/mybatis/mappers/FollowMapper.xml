@@ -15,7 +15,7 @@
         update Follow set status = #{status} where followIdx = #{followIdx}
     </update>
     <select id="selectAllFollowerWithUserIdx" parameterType="Long" resultType="capston.noodles.Follow.model.dto.GetFollowResponse">
-        select ui.userIdx, ui.nickname, ui.profileImage,
+        select ui.userIdx, ui.nickname, ui.profileImage, ui.identification,
             (case when ui.userIdx in
                 (select f2.followingIdx
                     from Follow f2
@@ -32,7 +32,7 @@
     </select>
 
     <select id="selectAllFollowingWithUserIdx" parameterType="Long" resultType="capston.noodles.Follow.model.dto.GetFollowResponse">
-        select ui.userIdx, ui.nickname, ui.profileImage,
+        select ui.userIdx, ui.nickname, ui.profileImage, ui.identification,
             (case when ui.userIdx in
                 (select f2.followingIdx
                     from Follow f2
