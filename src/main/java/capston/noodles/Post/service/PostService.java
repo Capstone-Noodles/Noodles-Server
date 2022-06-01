@@ -1,11 +1,9 @@
 package capston.noodles.Post.service;
 
+import capston.noodles.Post.model.entity.Hashtag;
 import capston.noodles.Post.model.entity.Post;
 import capston.noodles.Post.model.entity.PostImage;
-import capston.noodles.Post.model.entity.dto.LocationDto;
-import capston.noodles.Post.model.entity.dto.OnePostDto;
-import capston.noodles.Post.model.entity.dto.TotalUploadPostDto;
-import capston.noodles.Post.model.entity.dto.UploadPostDto;
+import capston.noodles.Post.model.entity.dto.*;
 import capston.noodles.Post.model.response.AllPostResponse;
 import capston.noodles.Post.model.response.OnePostResponse;
 import capston.noodles.Post.repository.PostRepository;
@@ -93,7 +91,17 @@ public class PostService {
         Post post = dto.toPost();
         post.setUserIdx(userIdx);
         postRepository.postPost(post);
+
+        // 해쉬태그를 하나씩 insert
         Long postIdx = post.getPostIdx();
+        List<String> hashtagWordList = dto.getHashtagWordList();
+        for (String hashtagWord : hashtagWordList) {
+            Hashtag hashtag = new Hashtag();
+            hashtag.setPostIdx(postIdx);
+            hashtag.setHashtagWord(hashtagWord);
+            postRepository.insertHashtag(hashtag);
+        }
+
         if (postIdx == null) {
             throw new Error();
         }

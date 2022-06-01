@@ -53,9 +53,7 @@ public class PostController {
     public ResponseMessage uploadPost(@ModelAttribute UploadPostDto uploadDto, HttpServletRequest request) throws IOException {
         System.out.println(uploadDto);
         List<MultipartFile> imageFileList = uploadDto.getImageFileList();
-        String token = request.getHeader("x-auth-token");
-        String userIdxStr = jwtProvider.getUserPk(token);
-        long userIdx = Long.parseLong(userIdxStr);
+        Long userIdx = jwtProvider.getUserPk(request);
         postService.postPost(uploadDto, imageFileList, userIdx);
         return new ResponseMessage("hi");
     }
@@ -91,5 +89,7 @@ public class PostController {
         postService.likePost(userIdx, postIdx);
         return new ResponseMessage("success like");
     }
+
+
 
 }
