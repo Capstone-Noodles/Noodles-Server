@@ -184,4 +184,37 @@
         insert into Hashtag(hashtagWord, postIdx)
         values(#{hashtagWord}, #{postIdx});
     </insert>
+
+    <select id="selectPostByHashtag" parameterType="capston.noodles.Post.model.entity.dto.SearchPostByHashtagDto" resultType="AllPostResponse">
+        set @location = POINT(#{longitude}, #{latitude});
+        select p.postIdx, p.location,p.content, ui.userIdx, ui.identification,ui.nickname,ui.profileImage,
+            (case
+                when <![CDATA[st_distance_sphere(@location, POINT(p.longitude, p.latitude)) < 1000]]>
+                    then concat(format(st_distance_sphere(@location, POINT(p.longitude, p.latitude)), 2), 'm')
+                else
+                    concat(format(st_distance_sphere(@location, POINT(p.longitude, p.latitude)) * 0.001 , 2), 'km')
+            end) as distance,
+            (select count(*)
+                from PostLike
+                where postIdx = p.postIdx
+                and status = 'Y'
+            )as likes,
+            group_concat(pi.image) as postImageList,
+            exists(select *
+                from PostLike
+                where postIdx = p.postIdx
+                and userIdx = #{userIdx}
+            ) as isLiked,
+            exists(select *
+                from Bookmark
+                where postIdx = p.postIdx
+                and userIdx = #{userIdx}
+            ) as isBookmarked
+        from Hashtag h
+        join Post p on p.postIdx = h.postIdx
+        join UserInfo ui on ui.userIDx = p.userIdx
+        join PostImage pi on pi.postIdx = p.postIdx
+        where h.hashtagWord like CONCAT('%',#{hashtag},'%')
+        group by p.postIdx;
+    </select>
 </mapper>

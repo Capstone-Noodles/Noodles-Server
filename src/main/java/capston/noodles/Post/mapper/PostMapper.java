@@ -3,10 +3,7 @@ package capston.noodles.Post.mapper;
 import capston.noodles.Post.model.entity.Hashtag;
 import capston.noodles.Post.model.entity.Post;
 import capston.noodles.Post.model.entity.PostImage;
-import capston.noodles.Post.model.entity.dto.InsertHashtagDto;
-import capston.noodles.Post.model.entity.dto.LocationDto;
-import capston.noodles.Post.model.entity.dto.OnePostDto;
-import capston.noodles.Post.model.entity.dto.TotalUploadPostDto;
+import capston.noodles.Post.model.entity.dto.*;
 import capston.noodles.Post.model.response.AllPostResponse;
 import capston.noodles.Post.model.response.OnePostResponse;
 import org.apache.ibatis.annotations.Mapper;
@@ -28,4 +25,6 @@ public interface PostMapper {
     void updateLike(@Param("userIdx") long userIdx, @Param("postIdx") long postIdx,  @Param("state") char state);
 
     void insertHashtag(Hashtag hashtag);
+
+    List<AllPostResponse> selectPostByHashtag(SearchPostByHashtagDto dto);
 }
