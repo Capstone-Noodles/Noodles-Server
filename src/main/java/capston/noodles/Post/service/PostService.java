@@ -161,4 +161,10 @@ public class PostService {
             postRepository.updateLike(userIdx, postIdx, state);
         }
     }
+
+    @Transactional
+    public List<AllPostResponse> getPostsByHashtag (SearchPostByHashtagDto dto, Long userIdx) {
+        dto.setUserIdx(userIdx);
+        return postRepository.getPostsByHashtag(dto);
+    }
 }

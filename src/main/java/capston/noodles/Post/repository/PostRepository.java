@@ -4,10 +4,7 @@ import capston.noodles.Post.mapper.PostMapper;
 import capston.noodles.Post.model.entity.Hashtag;
 import capston.noodles.Post.model.entity.Post;
 import capston.noodles.Post.model.entity.PostImage;
-import capston.noodles.Post.model.entity.dto.InsertHashtagDto;
-import capston.noodles.Post.model.entity.dto.LocationDto;
-import capston.noodles.Post.model.entity.dto.OnePostDto;
-import capston.noodles.Post.model.entity.dto.TotalUploadPostDto;
+import capston.noodles.Post.model.entity.dto.*;
 import capston.noodles.Post.model.response.AllPostResponse;
 import capston.noodles.Post.model.response.OnePostResponse;
 import lombok.RequiredArgsConstructor;
@@ -60,5 +57,9 @@ public class PostRepository {
 
     public void insertHashtag(Hashtag hashtag) {
         postMapper.insertHashtag(hashtag);
+    }
+
+    public List<AllPostResponse> getPostsByHashtag(SearchPostByHashtagDto dto) {
+        return postMapper.selectPostByHashtag(dto);
     }
 }
