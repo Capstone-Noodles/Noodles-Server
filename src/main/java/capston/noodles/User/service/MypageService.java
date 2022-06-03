@@ -2,6 +2,7 @@ package capston.noodles.User.service;
 
 import capston.noodles.User.exception.UpdateProfileException;
 import capston.noodles.User.model.entity.dto.UpdateProfileDto;
+import capston.noodles.User.model.request.MainPostRequest;
 import capston.noodles.User.model.response.MypageResponse;
 import capston.noodles.User.repository.MypageRepository;
 import capston.noodles.common.S3.S3Service;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -58,4 +60,10 @@ public class MypageService {
         }
         return;
     }
+
+    @Transactional
+    public int updateMainPost(MainPostRequest mainPostRequest) {
+        return mypageRepository.updateMainPost(mainPostRequest);
+    }
+
 }

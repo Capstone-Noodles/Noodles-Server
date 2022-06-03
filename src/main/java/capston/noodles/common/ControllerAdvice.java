@@ -2,6 +2,7 @@ package capston.noodles.common;
 
 import capston.noodles.Comment.exception.ParentCommentNotExist;
 import capston.noodles.Follow.exception.ChangeFollowStatusException;
+import capston.noodles.User.exception.UpdateMainPostException;
 import capston.noodles.common.S3.S3Exception;
 import capston.noodles.common.response.ResponseMessage;
 import capston.noodles.users.exception.DuplicatedIdException;
@@ -71,6 +72,12 @@ public class ControllerAdvice {
     @ExceptionHandler(S3Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected ResponseMessage s3Exception(HttpServletRequest request, S3Exception e) {
+        return new ResponseMessage(e.getMessage());
+    }
+
+    @ExceptionHandler(UpdateMainPostException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ResponseMessage UpdateMainPostException(HttpServletRequest request, UpdateMainPostException e) {
         return new ResponseMessage(e.getMessage());
     }
 }

@@ -15,4 +15,7 @@ public interface MypageMapper {
     int updateProfile(UpdateProfileDto dto);
 
     String getImageByUserIdx(Long userIdx);
+
+    int removeMain(Long userIdx);
+    int addMain(@Param("postIdx") Long postIdx, @Param("userIdx") Long userIdx);
 }

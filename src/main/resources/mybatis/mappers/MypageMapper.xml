@@ -59,13 +59,25 @@
     <update id="updateProfile" parameterType="capston.noodles.User.model.entity.dto.UpdateProfileDto">
         update UserInfo
         set nickname = #{nickname}, description = #{description}, profileImage = #{profileImage}
-        where userIdx = #{userIdx}
+        where userIdx = #{userIdx};
     </update>
 
     <select id="getImageByUserIdx" parameterType="Long" resultType="String">
         select profileImage
         from UserInfo
-        where userIdx = #{userIdx}
-
+        where userIdx = #{userIdx};
     </select>
+
+    <update id="removeMain" parameterType="Long">
+        update Post p
+        set p.isMain = 0
+        where p.userIdx = #{userIdx};
+    </update>
+    <update id="addMain" parameterType="map">
+        update Post p
+        set p.isMain = 1
+        where p.userIdx = #{userIdx}
+          and p.postIdx = #{postIdx};
+    </update>
+
 </mapper>

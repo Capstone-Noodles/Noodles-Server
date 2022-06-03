@@ -2,6 +2,7 @@ package capston.noodles.User.controller;
 
 
 import capston.noodles.User.model.entity.dto.UpdateProfileDto;
+import capston.noodles.User.model.request.MainPostRequest;
 import capston.noodles.User.model.response.MypageListResponse;
 import capston.noodles.User.model.response.MypageResponse;
 import capston.noodles.User.service.MypageService;
@@ -17,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -36,6 +38,7 @@ public class MypageController {
 
         return new ResponseMessage<>(MypageListResponse.from(mypageList));
     }
+
     @GetMapping("/mypage")
     public ResponseMessage<MypageListResponse> getMyInfo(HttpServletRequest request) {
         String token = request.getHeader("x-auth-token");
@@ -55,7 +58,17 @@ public class MypageController {
 
         return new ResponseMessage(new ResponseSuccessMessage(200, "프로필 변경 성공!"));
     }
+
+    @PatchMapping("/mypage/mainPost")
+    public ResponseMessage updateMainPost(HttpServletRequest request, @RequestBody MainPostRequest mainPostRequest) {
+        Long userIdx = jwtProvider.getUserPk(request);
+        mainPostRequest.setUserIdx(userIdx);
+        mypageService.updateMainPost(mainPostRequest);
+
+        return new ResponseMessage(new ResponseSuccessMessage(200, "대표게시물 설정 성공!"));
+    }
 }
+
 
 
 
