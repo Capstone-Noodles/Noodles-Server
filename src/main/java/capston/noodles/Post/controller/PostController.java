@@ -93,10 +93,10 @@ public class PostController {
 
     /**
      * 검색 API / 최승용 / 2022-06-03
-     * Body로 longitude,latitude,hashtag 를 입력받음
+     * Body로 longitude,latitude,hashtag 를 입력받
      */
     @GetMapping("/posts/search")
-    public ResponseMessage searchPosts(@RequestBody SearchPostByHashtagDto dto, HttpServletRequest request) {
+    public ResponseMessage searchPosts(@ModelAttribute SearchPostByHashtagDto dto, HttpServletRequest request) {
         Long userIdx = jwtProvider.getUserPk(request);
         List<AllPostResponse> postsByHashtag = postService.getPostsByHashtag(dto, userIdx);
         return new ResponseMessage(postsByHashtag);
