@@ -18,8 +18,8 @@ import java.util.List;
 public class PostRepository {
     private final PostMapper postMapper;
 
-    public List<AllPostResponse> getAllPostInfo(double longitude, double latitude, int userIdx) {
-        return postMapper.getAllPostInfo(longitude, latitude, userIdx);
+    public List<AllPostResponse> getAllPostInfo(double longitude, double latitude, int userIdx, Integer distance) {
+        return postMapper.getAllPostInfo(longitude, latitude, userIdx, distance);
     }
 
     public List<AllPostResponse> getOnePostInfo(OnePostDto dto) {

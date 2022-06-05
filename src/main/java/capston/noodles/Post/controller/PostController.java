@@ -29,12 +29,19 @@ public class PostController {
 
     // 모든 게시물 조회(거리 제한)
     @GetMapping("/posts")
-    public List<AllPostResponse> getAllPostInfo(@RequestParam("longitude") double longitude, @RequestParam("latitude") double latitude, HttpServletRequest request) {
+    public List<AllPostResponse> getAllPostInfo(@RequestParam("longitude") double longitude, @RequestParam("latitude") double latitude, HttpServletRequest request, @RequestParam(value = "distance", required=false) Integer distance) {
         String token = request.getHeader("x-auth-token");
         String userIdxStr = jwtProvider.getUserPk(token);
         int userIdx = Integer.parseInt(userIdxStr);
 
-        List<AllPostResponse> AllPostList = postService.getAllPostInfo(longitude, latitude, userIdx);
+        if(distance == null) {
+            distance = 20000;
+        }
+        else {
+            distance = distance * 1000;
+        }
+
+        List<AllPostResponse> AllPostList = postService.getAllPostInfo(longitude, latitude, userIdx, distance);
 
         return AllPostList;
     }
