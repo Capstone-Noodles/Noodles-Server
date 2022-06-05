@@ -5,7 +5,6 @@
 <mapper namespace="capston.noodles.Post.mapper.PostMapper">
 
     <select id="getAllPostInfo" parameterType = "map" resultType="AllPostResponse">
-
         set @location = POINT(#{longitude}, #{latitude});
         select p.createdAt, p.postIdx, u.userIdx, u.identification, u.nickname, u.profileImage, group_concat(pi.image) postImageList, p.location, p.content,
         (case
@@ -35,7 +34,7 @@
                     where b.userIdx = #{userIdx}
                     and b.status = 'Y'
                     ) y on y.postIdx = p.postIdx
-        where <![CDATA[st_distance_sphere(@location, POINT(p.longitude, p.latitude)) < 20000]]>
+        where <![CDATA[st_distance_sphere(@location, POINT(p.longitude, p.latitude)) < #{distance}]]>
         and p.status = 'Y'
         group by p.postIdx
         order by st_distance_sphere(@location, POINT(p.longitude, p.latitude)), 1 DESC;
