@@ -36,7 +36,7 @@
     </select>
 
     <select id="getUserInfo" parameterType = "long" resultType="MypageResponse">
-        select u.profileImage, u.nickname, u.identification, u.description, ifnull(x.following, 0) following, ifnull(y.follower, 0) follower, group_concat(pi.postIdx) postIdxList, group_concat(pi.image) imageList
+        select u.userIdx,u.profileImage, u.nickname, u.identification, u.description, ifnull(x.following, 0) following, ifnull(y.follower, 0) follower, group_concat(pi.postIdx) postIdxList, group_concat(pi.image) imageList
         from UserInfo u
                  left join (
             select count(f.userIdx) following, f.userIdx

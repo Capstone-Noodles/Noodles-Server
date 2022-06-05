@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class MypageResponse {
+    private Long userIdx;
     private String profileImage;
     private String nickname;
     private String identification;
