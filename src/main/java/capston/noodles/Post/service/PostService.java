@@ -142,8 +142,8 @@ public class PostService {
     }
 
     @Transactional
-    public List<AllPostResponse> getMyPosts(Long userIdx) {
-        return postRepository.getMyPosts(userIdx);
+    public List<AllPostResponse> getMyPosts(String identification) {
+        return postRepository.getMyPosts(identification);
     }
 
     @Transactional

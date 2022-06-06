@@ -82,10 +82,10 @@ public class PostController {
 
     // 내 게시물 조회 API
     @GetMapping("/myPosts")
-    public ResponseMessage getMyPosts(HttpServletRequest request) {
-        Long userIdx = jwtProvider.getUserPk(request);
+    public ResponseMessage getMyPosts(HttpServletRequest request, @RequestParam("identification") String identification) {
+        //Long userIdx = jwtProvider.getUserPk(request);
 
-        List<AllPostResponse> result = postService.getMyPosts(userIdx);
+        List<AllPostResponse> result = postService.getMyPosts(identification);
         return new ResponseMessage(result);
     }
 

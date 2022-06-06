@@ -20,6 +20,7 @@ public interface PostMapper {
     void deletePost(long postIdx);
     List<AllPostResponse> getMyFollowerPosts(LocationDto dto);
     List<AllPostResponse> getMyPosts(Long userIdx);
+    Long getUserIdxById(String identification);
     String getPostLikeByUser(@Param("userIdx") long userIdx, @Param("postIdx") long postIdx);
     void postLike(@Param("userIdx") long userIdx, @Param("postIdx") long postIdx);
     void updateLike(@Param("userIdx") long userIdx, @Param("postIdx") long postIdx,  @Param("state") char state);

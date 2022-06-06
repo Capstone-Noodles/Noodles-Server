@@ -44,7 +44,9 @@ public class PostRepository {
         return postMapper.getMyFollowerPosts(dto);
     }
 
-    public List<AllPostResponse> getMyPosts(Long userIdx) {
+    public List<AllPostResponse> getMyPosts(String identification) {
+        Long userIdx = postMapper.getUserIdxById(identification);
+        System.out.println(userIdx);
         return postMapper.getMyPosts(userIdx);
     }
 

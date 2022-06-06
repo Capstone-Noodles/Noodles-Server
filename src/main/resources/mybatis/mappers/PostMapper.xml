@@ -218,4 +218,10 @@
         and p.status = 'Y'
         group by p.postIdx;
     </select>
+
+    <select id="getUserIdxById" parameterType="String" resultType="Long">
+        select u.userIdx
+        from UserInfo u
+        where u.identification = #{identification}
+    </select>
 </mapper>
