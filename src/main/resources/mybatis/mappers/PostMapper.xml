@@ -126,6 +126,7 @@
         join Post p on ui.userIdx = p.userIdx
         left join PostImage pi on p.postIdx = pi.postIdx
         where f.followingIdx = #{userIdx}
+        and p.status = 'Y'
         group by p.postIdx
         order by p.createdAt desc ;
     </select>
@@ -214,6 +215,7 @@
         join UserInfo ui on ui.userIDx = p.userIdx
         join PostImage pi on pi.postIdx = p.postIdx
         where h.hashtagWord like CONCAT('%',#{hashtag},'%')
+        and p.status = 'Y'
         group by p.postIdx;
     </select>
 </mapper>
