@@ -133,7 +133,7 @@
         join UserInfo ui on ui.userIdx = f.userIdx
         join Post p on ui.userIdx = p.userIdx
         left join PostImage pi on p.postIdx = pi.postIdx
-        where f.userIdx = #{userIdx}
+        where f.followingIdx = #{userIdx}
         and p.status = 'Y'
         group by p.postIdx
         order by p.createdAt desc ;
