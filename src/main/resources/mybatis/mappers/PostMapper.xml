@@ -6,7 +6,8 @@
 
     <select id="getAllPostInfo" parameterType = "map" resultType="AllPostResponse">
         set @location = POINT(#{longitude}, #{latitude});
-        select p.createdAt, p.postIdx, u.userIdx, u.identification, u.nickname, u.profileImage, group_concat(pi.image) postImageList, p.location, p.content,group_concat(h.hashtagWord) as hashtagList,
+        select p.createdAt, p.postIdx, u.userIdx, u.identification, u.nickname, u.profileImage, group_concat(pi.image) postImageList, p.location, p.content,
+        (select group_concat(h.hashtagWord) from Hashtag h where h.postIdx = p.postIdx group by h.postIdx) as hashtagList,
         (case
         when <![CDATA[st_distance_sphere(@location, POINT(p.longitude, p.latitude)) < 1000]]>
         then concat(format(st_distance_sphere(@location, POINT(p.longitude, p.latitude)), 2), 'm')
@@ -34,7 +35,6 @@
                     where b.userIdx = #{userIdx}
                     and b.status = 'Y'
                     ) y on y.postIdx = p.postIdx
-        left join Hashtag h on p.postIdx = h.postIdx
         where <![CDATA[st_distance_sphere(@location, POINT(p.longitude, p.latitude)) < #{distance}]]>
         and p.status = 'Y'
         group by p.postIdx
@@ -43,7 +43,8 @@
 
     <select id="getOnePostInfo" parameterType = "capston.noodles.Post.model.entity.dto.OnePostDto" resultType="AllPostResponse">
         set @location = POINT(#{longitude}, #{latitude});
-        select p.createdAt, p.postIdx, u.userIdx, u.identification, u.nickname, u.profileImage, group_concat(pi.image) postImageList, p.location, p.content, group_concat(h.hashtagWord) as hashtagList,
+        select p.createdAt, p.postIdx, u.userIdx, u.identification, u.nickname, u.profileImage, group_concat(pi.image) postImageList, p.location, p.content,
+        (select group_concat(h.hashtagWord) from Hashtag h where h.postIdx = p.postIdx group by h.postIdx) as hashtagList,
                (case
                     when <![CDATA[st_distance_sphere(@location, POINT(p.longitude, p.latitude)) < 1000]]>
                         then concat(format(st_distance_sphere(@location, POINT(p.longitude, p.latitude)), 2), 'm')
@@ -74,7 +75,6 @@
                             where b.userIdx = #{userIdx}
                               and b.status = 'Y'
         ) y on y.postIdx = p.postIdx
-        left join Hashtag h on p.postIdx = h.postIdx
         where p.status = 'Y' and p.postIdx = #{postIdx}
         group by p.postIdx
     </select>
@@ -97,7 +97,8 @@
 
     <select id="getMyFollowerPosts" parameterType="capston.noodles.Post.model.entity.dto.LocationDto" resultType="AllPostResponse">
         set @location = POINT(#{longitude}, #{latitude});
-        select ui.userIdx, ui.nickname,ui.identification, ui.profileImage, p.postIdx, p.location, p.content,group_concat(h.hashtagWord) as hashtagList,
+        select ui.userIdx, ui.nickname,ui.identification, ui.profileImage, p.postIdx, p.location, p.content,
+        (select group_concat(h.hashtagWord) from Hashtag h where h.postIdx = p.postIdx group by h.postIdx) as hashtagList,
         (case
         when <![CDATA[st_distance_sphere(@location, POINT(p.longitude, p.latitude)) < 1000]]>
         then concat(format(st_distance_sphere(@location, POINT(p.longitude, p.latitude)), 2), 'm')
@@ -126,7 +127,6 @@
         join UserInfo ui on ui.userIdx = f.userIdx
         join Post p on ui.userIdx = p.userIdx
         left join PostImage pi on p.postIdx = pi.postIdx
-        left join Hashtag h on p.postIdx = h.postIdx
         where f.followingIdx = #{userIdx}
         and p.status = 'Y'
         group by p.postIdx
