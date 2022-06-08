@@ -53,8 +53,10 @@
                    end) as distance,
                (select count(*)
                 from PostLike pl
-                where pl.userIdx = #{userIdx} and p.postIdx = pl.postIdx) as likes,
-               (case x.likeCnt
+                where p.postIdx = pl.postIdx and pl.status = 'Y') as likes,
+               (case (select count(*)
+                      from PostLike pl
+                      where pl.userIdx = #{userIdx} and pl.status = 'Y' and pl.postIdx = p.postIdx)
                     when 1 then 1
                     else 0
                    end) as isliked,
