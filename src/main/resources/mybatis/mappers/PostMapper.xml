@@ -132,10 +132,10 @@
         end
         ) as isBookmarked
         from Follow f
-        join UserInfo ui on ui.userIdx = f.userIdx
+        join UserInfo ui on ui.userIdx = f.followingIdx
         join Post p on ui.userIdx = p.userIdx
         left join PostImage pi on p.postIdx = pi.postIdx
-        where f.followingIdx = #{userIdx}
+        where f.userIdx = #{userIdx} and f.status = 'Y'
         and p.status = 'Y'
         group by p.postIdx
         order by p.createdAt desc ;
@@ -215,7 +215,8 @@
                     when 1 then 1
                     else 0
                    end) as isliked,
-            exists(select *
+               group_concat(pi.image) as postImageList,
+               exists(select *
                 from Bookmark
                 where postIdx = p.postIdx
                 and userIdx = #{userIdx}
